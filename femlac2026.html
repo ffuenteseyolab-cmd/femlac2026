@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEMLAC 2026 — Directorio de Socios</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f7fc; color: #0d3550; min-height: 100vh; }
+
+/* HEADER */
+.header { background: linear-gradient(135deg,#1a5f8a 0%,#2478a8 60%,#3b9dd2 100%); padding: 16px 20px 0; box-shadow: 0 3px 16px rgba(26,95,138,0.25); }
+.header-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.logo-box { width: 64px; height: 64px; border-radius: 12px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 5px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); flex-shrink: 0; }
+.header-title { color: #fff; font-size: 15px; font-weight: 800; line-height: 1.2; }
+.header-sub { color: rgba(255,255,255,0.72); font-size: 11px; margin-top: 3px; }
+.tabs { display: flex; gap: 2px; overflow-x: auto; }
+.tab { border: none; cursor: pointer; padding: 9px 16px; font-size: 12px; font-weight: 700; border-radius: 8px 8px 0 0; background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); transition: all 0.15s; white-space: nowrap; }
+.tab.active { background: #fff; color: #1a5f8a; }
+
+/* MAIN */
+.main { max-width: 1160px; margin: 0 auto; padding: 16px 12px 60px; }
+
+/* STATS */
+.stats { display: grid; grid-template-columns: repeat(7,1fr); gap: 8px; margin-bottom: 16px; }
+.stat { background: #fff; border-radius: 10px; padding: 10px 12px; border: 1px solid #aed6ef; }
+.stat-label { font-size: 9.5px; color: #4a7fa0; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
+.stat-value { font-size: 22px; font-weight: 800; line-height: 1; }
+
+/* BANNER */
+.banner { background: #fff3cc; border: 1px solid #f5c49a; border-radius: 10px; padding: 10px 14px; margin-bottom: 12px; font-size: 12px; color: #916a00; display: flex; align-items: center; gap: 8px; }
+.banner-info { background: #d4ecf9; border: 1px solid #aed6ef; color: #1a5f8a; }
+
+/* FILTERS */
+.filters { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+.filters input, .filters select { border: 1px solid #aed6ef; border-radius: 8px; padding: 8px 10px; font-size: 12px; background: #fff; color: #0d3550; outline: none; }
+.filters input { flex: 1; min-width: 160px; }
+.btn-print { border: 1px solid #e87722; border-radius: 8px; padding: 8px 14px; cursor: pointer; background: #e87722; color: #fff; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.btn-refresh { border: 1px solid #3b9dd2; border-radius: 8px; padding: 8px 12px; cursor: pointer; background: #3b9dd2; color: #fff; font-size: 12px; font-weight: 700; white-space: nowrap; }
+
+/* TABLE */
+.table-wrap { background: #fff; border-radius: 12px; border: 1px solid #aed6ef; overflow-x: auto; box-shadow: 0 2px 12px rgba(26,95,138,0.07); }
+table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 600px; }
+thead th { background: #e8f1f7; padding: 8px 10px; text-align: left; font-weight: 700; font-size: 10px; color: #4a7fa0; border-bottom: 1px solid #aed6ef; cursor: pointer; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.04em; }
+tbody tr { border-bottom: 1px solid #f4f8fb; cursor: pointer; transition: background 0.1s; }
+tbody tr:nth-child(even) { background: #f4f8fb; }
+tbody tr:hover { background: #d4ecf9; }
+td { padding: 7px 10px; }
+.td-num { color: #89b0c8; font-weight: 700; font-size: 11px; }
+.td-name { font-weight: 600; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.td-muted { color: #89b0c8; font-size: 11px; }
+.td-sub { color: #4a7fa0; font-size: 11.5px; }
+
+/* PILLS */
+.pill { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 700; white-space: nowrap; }
+.pill-green { background: #d6f2e4; color: #1a7a4a; }
+.pill-red { background: #fce8e8; color: #b83232; }
+.pill-amber { background: #fff3cc; color: #916a00; }
+.pill-blue { background: #d4ecf9; color: #1a5f8a; }
+.pill-gray { background: #e8f1f7; color: #89b0c8; }
+.pill-orange { background: #fef0e3; color: #e87722; }
+
+/* PAGINATION */
+.pag { display: flex; gap: 8px; align-items: center; justify-content: flex-end; margin-top: 10px; font-size: 12px; color: #4a7fa0; flex-wrap: wrap; }
+.pag button { border: 1px solid #aed6ef; border-radius: 6px; padding: 4px 10px; cursor: pointer; background: #fff; color: #3b9dd2; font-size: 13px; }
+.pag button:disabled { opacity: 0.4; cursor: default; }
+
+/* ALERT */
+.alert { margin-top: 12px; border-radius: 10px; padding: 10px 14px; font-size: 12px; }
+.alert-amber { background: #fff3cc; border: 1px solid #f5c49a; color: #916a00; }
+.alert-green { background: #d6f2e4; border: 1px solid #a0dcc0; color: #1a7a4a; }
+
+/* MODAL */
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(10,35,60,0.55); z-index: 50; align-items: center; justify-content: center; padding: 16px; }
+.modal-bg.open { display: flex; }
+.modal { background: #fff; border-radius: 16px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 64px rgba(0,0,0,0.3); }
+.modal-header { background: linear-gradient(135deg,#1a5f8a 0%,#2478a8 60%,#3b9dd2 100%); padding: 16px 18px 12px; border-radius: 16px 16px 0 0; display: flex; align-items: center; gap: 12px; }
+.modal-avatar { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.22); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: #fff; flex-shrink: 0; }
+.modal-name { color: #fff; font-weight: 700; font-size: 14px; line-height: 1.3; }
+.modal-sub { color: rgba(255,255,255,0.75); font-size: 11px; margin-top: 2px; }
+.modal-close { border: 1px solid rgba(255,255,255,0.4); border-radius: 8px; padding: 5px 10px; cursor: pointer; background: rgba(255,255,255,0.18); color: #fff; font-size: 12px; margin-left: auto; flex-shrink: 0; }
+.modal-body { padding: 14px 18px 18px; }
+.modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; margin-top: 12px; }
+.field-label { font-size: 10px; color: #89b0c8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+.field-val { font-size: 12.5px; color: #0d3550; word-break: break-word; }
+.ficha-box { background: #d6f2e4; border: 1px solid #a0dcc0; border-radius: 8px; padding: 8px 12px; margin-bottom: 10px; font-size: 12px; display: flex; align-items: center; gap: 8px; }
+.logo-box-modal { background: #f4f8fb; border: 1px solid #aed6ef; border-radius: 8px; padding: 8px 12px; margin-bottom: 10px; font-size: 12px; }
+.acred-box { background: #d4ecf9; border: 1px solid #aed6ef; border-radius: 8px; padding: 8px 12px; margin-bottom: 10px; font-size: 12px; color: #1a5f8a; }
+
+/* LOADING */
+.loading { text-align: center; padding: 40px; color: #4a7fa0; font-size: 14px; }
+.spinner { display: inline-block; width: 32px; height: 32px; border: 3px solid #aed6ef; border-top-color: #1a5f8a; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* PRINT */
+@media print {
+  .header, .filters, .pag, .alert, .btn-print, .btn-refresh, .tabs { display: none !important; }
+  .print-header { display: block !important; }
+  body { background: #fff; }
+  .main { padding: 0; }
+  .table-wrap { box-shadow: none; border: 1px solid #ccc; }
+  .modal-bg { display: none !important; }
+}
+.print-header { display: none; padding: 10px 0 8px; border-bottom: 2px solid #e87722; margin-bottom: 12px; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .stats { grid-template-columns: repeat(4,1fr); gap: 6px; }
+  .header-title { font-size: 12px; }
+  .tab { padding: 8px 12px; font-size: 11px; }
+  .filters input { min-width: 120px; }
+}
+@media (max-width: 400px) {
+  .stats { grid-template-columns: repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="logo-box">
+      <svg viewBox="0 0 100 110" width="54" height="54" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="28" cy="8" r="6" fill="#f5a623"/>
+        <circle cx="50" cy="5" r="6" fill="#f5a623"/>
+        <circle cx="72" cy="8" r="6" fill="#f5a623"/>
+        <rect x="14" y="20" width="72" height="12" rx="6" fill="#f5a623"/>
+        <rect x="18" y="28" width="14" height="34" rx="7" fill="#f5a623"/>
+        <rect x="43" y="28" width="14" height="34" rx="7" fill="#f5a623"/>
+        <rect x="68" y="28" width="14" height="34" rx="7" fill="#f5a623"/>
+        <text x="50" y="80" text-anchor="middle" font-family="serif" font-weight="bold" font-size="18" fill="#f5a623">FEMLAC</text>
+        <line x1="8" y1="88" x2="92" y2="88" stroke="#f5a623" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div>
+      <div class="header-title">FEDERACIÓN MEXICANA DE LABORATORIOS PARA LA CONSTRUCCIÓN</div>
+      <div class="header-sub" id="header-sub">Cargando datos...</div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="setTab(0)">Inscritos</button>
+    <button class="tab" onclick="setTab(1)">Pagos</button>
+    <button class="tab" onclick="setTab(2)">Reconocimientos</button>
+    <button class="tab" onclick="setTab(3)">Logo / Web</button>
+  </div>
+</div>
+
+<div class="main">
+  <!-- Print header (solo visible al imprimir) -->
+  <div class="print-header" id="print-header">
+    <strong style="color:#1a5f8a;font-size:13px">FEDERACIÓN MEXICANA DE LABORATORIOS PARA LA CONSTRUCCIÓN</strong><br>
+    <span style="color:#e87722;font-size:11px">Directorio de Socios 2026</span>
+  </div>
+
+  <div id="loading" class="loading">
+    <div class="spinner"></div><br>Cargando datos desde Google Sheets…
+  </div>
+  <div id="app" style="display:none">
+    <!-- STATS -->
+    <div class="stats" id="stats"></div>
+    <!-- BANNER ADEUDO -->
+    <div class="banner" id="banner-adeudo" style="display:none">
+      💰 <span id="banner-txt"></span>
+    </div>
+    <!-- FILTERS -->
+    <div class="filters">
+      <input type="text" id="search" placeholder="🔍 Buscar nombre, estado o ciudad…" oninput="applyFilters()">
+      <select id="fEst" onchange="applyFilters()"><option value="">Todos los estados</option></select>
+      <select id="fPago" onchange="applyFilters()" style="display:none">
+        <option value="">Todos los pagos</option>
+        <option value="PAGADO">Pagados</option>
+        <option value="ABONO">Con abono</option>
+        <option value="SIN PAGO">Sin pago</option>
+      </select>
+      <button class="btn-refresh" onclick="loadData()">⟳ Actualizar</button>
+      <button class="btn-print" onclick="printResults()">🖨️ Imprimir</button>
+    </div>
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <table>
+        <thead id="thead"></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <!-- PAGINATION -->
+    <div class="pag" id="pag"></div>
+    <!-- ALERTS -->
+    <div id="alert-recon"></div>
+    <div id="alert-sinnum"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-avatar" id="m-avatar"></div>
+      <div>
+        <div class="modal-name" id="m-name"></div>
+        <div class="modal-sub" id="m-sub"></div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">✕ Cerrar</button>
+    </div>
+    <div class="modal-body" id="m-body"></div>
+  </div>
+</div>
+
+<!-- PRINT VIEW -->
+<div id="print-view" style="display:none;position:fixed;inset:0;background:#fff;z-index:100;overflow-y:auto;padding:20px">
+  <div style="margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap">
+    <button onclick="document.getElementById('print-view').style.display='none'" style="border:1px solid #1a5f8a;border-radius:6px;padding:6px 14px;cursor:pointer;background:#1a5f8a;color:#fff;font-size:13px;font-weight:700">← Volver</button>
+    <button onclick="window.print()" style="border:1px solid #e87722;border-radius:6px;padding:6px 14px;cursor:pointer;background:#e87722;color:#fff;font-size:13px;font-weight:700">🖨️ Imprimir / PDF</button>
+  </div>
+  <div id="print-content"></div>
+</div>
+
+<script>
+const URLS = {
+  inscritos:     'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrn0tDIZfQhJ61iuTXt8edkH1UCvZBvHVtSad4ZkzWZjhZzxgobZYbq44I7nR0Yx3tImSUJGUodxM3/pub?gid=1482124389&single=true&output=csv',
+  pagos:         'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrn0tDIZfQhJ61iuTXt8edkH1UCvZBvHVtSad4ZkzWZjhZzxgobZYbq44I7nR0Yx3tImSUJGUodxM3/pub?gid=1054439263&single=true&output=csv',
+  reconocimientos:'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrn0tDIZfQhJ61iuTXt8edkH1UCvZBvHVtSad4ZkzWZjhZzxgobZYbq44I7nR0Yx3tImSUJGUodxM3/pub?gid=472740108&single=true&output=csv',
+  logos:         'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrn0tDIZfQhJ61iuTXt8edkH1UCvZBvHVtSad4ZkzWZjhZzxgobZYbq44I7nR0Yx3tImSUJGUodxM3/pub?gid=1486724500&single=true&output=csv',
+};
+const CUOTA = 7500;
+let currentTab = 0;
+let currentPage = 1;
+const PER = 15;
+let sortKey = 'num';
+let sortDir = 1;
+let allData = { inscritos:[], pagos:{}, reconocidos:new Set(), logos:{} };
+let filtered = [];
+
+/* ── CSV parser ── */
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = splitCSVLine(lines[0]);
+  return lines.slice(1).map(line => {
+    const vals = splitCSVLine(line);
+    const obj = {};
+    headers.forEach((h,i) => obj[h.trim()] = (vals[i]||'').trim());
+    return obj;
+  });
+}
+function splitCSVLine(line) {
+  const result = []; let cur = ''; let inQ = false;
+  for (let i=0;i<line.length;i++){
+    const c = line[i];
+    if (c==='"') { inQ=!inQ; continue; }
+    if (c===',' && !inQ) { result.push(cur); cur=''; continue; }
+    cur += c;
+  }
+  result.push(cur);
+  return result;
+}
+
+/* ── Fetch all sheets ── */
+async function loadData() {
+  document.getElementById('loading').style.display='block';
+  document.getElementById('app').style.display='none';
+  try {
+    const [r1,r2,r3,r4] = await Promise.all([
+      fetch(URLS.inscritos).then(r=>r.text()),
+      fetch(URLS.pagos).then(r=>r.text()),
+      fetch(URLS.reconocimientos).then(r=>r.text()),
+      fetch(URLS.logos).then(r=>r.text()),
+    ]);
+
+    // PESTAÑA 1 — Inscritos
+    const ins = parseCSV(r1);
+    allData.inscritos = ins.map(row => ({
+      num:    row['N SOCIO'] ? parseInt(row['N SOCIO']) : null,
+      nombre: row['NOMBRE COMERCIAL DEL LABORATORIO'] || row['NOMBRE O RAZÓN SOCIAL'] || '',
+      razon:  row['NOMBRE O RAZÓN SOCIAL'] || '',
+      email:  row['Dirección de correo electrónico'] || '',
+      estado: row['ESTADO'] || '',
+      ciudad: row['CIUDAD'] || '',
+      empleados: row['NUMERO DE EMPLEADOS'] || '',
+      acreditado: row['ESTA ACREDITADO SEÑALAR AREAS'] || '',
+      rep:    row['NOMBRE REPRESENTANTE LEGAL'] || '',
+      tec:    row['NOMBRE RESPONSABLE TÉCNICO'] || '',
+      tel1:   row['TELEFONOS OFICINA 1'] || '',
+      cel:    row['CELULAR'] || '',
+      mapa:   row['LOCALIZACION DEL LABORATORIO'] || '',
+    }));
+
+    // PESTAÑA 2 — Pagos (email → {monto, ficha, lab})
+    allData.pagos = {};
+    const pags = parseCSV(r2);
+    pags.forEach(row => {
+      const email = (row['Dirección de correo electrónico']||'').trim().toLowerCase();
+      const ficha = row['ANEXAR FICHA DE DEPOSTIO'] || '';
+      // nota PAGO 7000 y PAGO 3000 vienen en columnas extra
+      const nota = Object.values(row).join(' ');
+      let monto = 7500;
+      if (nota.includes('PAGO 7000')) monto = 7000;
+      else if (nota.includes('PAGO 3000')) monto = 3000;
+      else if (!ficha) monto = 0;
+      if (email) allData.pagos[email] = { monto, ficha, lab: row['CONFIRMACION NOMBRE COMERCIAL DEL LABORATORIO']||'' };
+    });
+
+    // PESTAÑA 3 — Reconocimientos
+    allData.reconocidos = new Set();
+    const recs = parseCSV(r3);
+    recs.forEach(row => {
+      const n = parseInt(row['NO SOCIO']);
+      const val = (row['CONSTANCIA DIGITAL SOCIO']||'').trim().toUpperCase();
+      if (!isNaN(n) && val==='TRUE') allData.reconocidos.add(n);
+    });
+
+    // PESTAÑA 4 — Logos
+    allData.logos = {};
+    const logs = parseCSV(r4);
+    logs.forEach(row => {
+      const n = parseInt(row['NUMERO DE SOCIO']);
+      if (!isNaN(n)) {
+        allData.logos[n] = {
+          logo: row['LOGOTIPO'] || '',
+          web:  row['DIRECCION DE PAGINA WEB'] || '',
+        };
+      }
+    });
+
+    buildEstados();
+    applyFilters();
+    renderStats();
+    document.getElementById('loading').style.display='none';
+    document.getElementById('app').style.display='block';
+
+    const fecha = new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('header-sub').textContent =
+      `Directorio de Socios 2026 · ${allData.inscritos.length} laboratorios · Actualizado ${fecha}`;
+  } catch(e) {
+    document.getElementById('loading').innerHTML = `<div style="color:#b83232">❌ Error al cargar datos.<br><small>${e.message}</small><br><br><button onclick="loadData()" style="padding:8px 16px;background:#1a5f8a;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:13px">Reintentar</button></div>`;
+  }
+}
+
+function getPago(lab) {
+  const email = (lab.email||'').toLowerCase();
+  const p = allData.pagos[email] || null;
+  if (!p || p.monto===0) return {monto:0, ficha:'', adeudo:CUOTA, status:'SIN PAGO'};
+  if (p.monto >= CUOTA) return {...p, adeudo:0, status:'PAGADO'};
+  return {...p, adeudo:CUOTA-p.monto, status:`ABONO $${p.monto.toLocaleString()}`};
+}
+
+function buildEstados() {
+  const sel = document.getElementById('fEst');
+  const estados = [...new Set(allData.inscritos.map(l=>l.estado).filter(Boolean))].sort();
+  sel.innerHTML = '<option value="">Todos los estados</option>' +
+    estados.map(e=>`<option value="${e}">${e}</option>`).join('');
+}
+
+function renderStats() {
+  const labs = allData.inscritos;
+  const conNum   = labs.filter(l=>l.num).length;
+  const sinNum   = labs.filter(l=>!l.num).length;
+  const pagados  = labs.filter(l=>getPago(l).status==='PAGADO').length;
+  const abonos   = labs.filter(l=>getPago(l).status.startsWith('ABONO')).length;
+  const sinPago  = labs.filter(l=>getPago(l).status==='SIN PAGO').length;
+  const recon    = allData.reconocidos.size;
+  const logoN    = Object.keys(allData.logos).length;
+  const adeudoT  = labs.reduce((s,l)=>s+getPago(l).adeudo,0);
+
+  const items = [
+    {l:'Inscritos',     v:labs.length, c:'#3b9dd2'},
+    {l:'Con N° socio',  v:conNum,       c:'#1a5f8a'},
+    {l:'Sin N° socio',  v:sinNum,       c:'#89b0c8'},
+    {l:'Pagados',       v:pagados,      c:'#1a7a4a'},
+    {l:'Con abono',     v:abonos,       c:'#916a00'},
+    {l:'Sin pago',      v:sinPago,      c:'#b83232'},
+    {l:'Reconocimiento',v:recon,        c:'#e87722'},
+  ];
+  document.getElementById('stats').innerHTML = items.map(s=>
+    `<div class="stat"><div class="stat-label">${s.l}</div><div class="stat-value" style="color:${s.c}">${s.v}</div></div>`
+  ).join('');
+
+  if (adeudoT > 0) {
+    document.getElementById('banner-adeudo').style.display='flex';
+    document.getElementById('banner-txt').innerHTML =
+      `<b>Adeudo total pendiente: $${adeudoT.toLocaleString()} MXN</b> — ${abonos} laboratorio(s) con abono, ${sinPago} sin pago.`;
+  }
+}
+
+function setTab(i) {
+  currentTab = i;
+  currentPage = 1;
+  document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx===i));
+  document.getElementById('fPago').style.display = i===1?'inline-block':'none';
+  applyFilters();
+}
+
+function applyFilters() {
+  const q    = document.getElementById('search').value.toLowerCase();
+  const est  = document.getElementById('fEst').value;
+  const pago = document.getElementById('fPago').value;
+
+  filtered = allData.inscritos.filter(l => {
+    if (q && !l.nombre.toLowerCase().includes(q) &&
+             !l.estado.toLowerCase().includes(q) &&
+             !l.ciudad.toLowerCase().includes(q)) return false;
+    if (est && l.estado !== est) return false;
+    if (currentTab===1 && pago) {
+      const ps = getPago(l).status;
+      if (pago==='PAGADO'   && ps!=='PAGADO') return false;
+      if (pago==='ABONO'    && !ps.startsWith('ABONO')) return false;
+      if (pago==='SIN PAGO' && ps!=='SIN PAGO') return false;
+    }
+    return true;
+  });
+
+  // sort
+  filtered.sort((a,b)=>{
+    if (sortKey==='num') {
+      if (a.num===null&&b.num===null) return 0;
+      if (a.num===null) return 1;
+      if (b.num===null) return -1;
+      return (a.num-b.num)*sortDir;
+    }
+    return String(a[sortKey]||'').localeCompare(String(b[sortKey]||''),'es')*sortDir;
+  });
+
+  currentPage = 1;
+  renderTable();
+  renderAlerts();
+}
+
+function srt(k) {
+  if (sortKey===k) sortDir*=-1; else { sortKey=k; sortDir=1; }
+  applyFilters();
+}
+function arr(k) { return sortKey===k?(sortDir===1?' ↑':' ↓'):''; }
+
+function pill(text, cls) { return `<span class="pill ${cls}">${text}</span>`; }
+
+function pagoChip(lab) {
+  const p = getPago(lab);
+  if (p.status==='PAGADO') return pill('PAGADO','pill-green');
+  if (p.status.startsWith('ABONO')) return pill(p.status,'pill-amber');
+  return pill('SIN PAGO','pill-red');
+}
+
+function renderTable() {
+  const start = (currentPage-1)*PER;
+  const page  = filtered.slice(start, start+PER);
+
+  // Headers
+  const baseH = `<th onclick="srt('num')">#${arr('num')}</th>
+    <th onclick="srt('nombre')">Laboratorio${arr('nombre')}</th>
+    <th onclick="srt('estado')">Estado${arr('estado')}</th>
+    <th>Personal</th>`;
+  let extraH = '';
+  if (currentTab===0) extraH = '<th>Acreditación</th>';
+  if (currentTab===1) extraH = '<th>Pago</th><th>Adeudo</th><th>Ficha</th>';
+  if (currentTab===2) extraH = '<th>Reconocimiento</th><th>Pago OK</th>';
+  if (currentTab===3) extraH = '<th>Logo</th><th>Página web</th>';
+  document.getElementById('thead').innerHTML = `<tr>${baseH}${extraH}</tr>`;
+
+  if (!page.length) {
+    document.getElementById('tbody').innerHTML =
+      `<tr><td colspan="8" style="padding:2rem;text-align:center;color:#89b0c8">Sin resultados.</td></tr>`;
+  } else {
+    document.getElementById('tbody').innerHTML = page.map((l,i)=>{
+      const pago  = getPago(l);
+      const recon = l.num ? allData.reconocidos.has(l.num) : false;
+      const logoD = l.num ? allData.logos[l.num] : null;
+      let extra = '';
+      if (currentTab===0) extra = `<td>${l.acreditado?pill('Acreditado','pill-blue'):pill('No','pill-gray')}</td>`;
+      if (currentTab===1) extra = `
+        <td>${pagoChip(l)}</td>
+        <td style="font-weight:${pago.adeudo>0?700:400};color:${pago.adeudo>0?'#b83232':'#89b0c8'}">${pago.adeudo>0?'$'+pago.adeudo.toLocaleString():'—'}</td>
+        <td>${pago.ficha?`<a href="${pago.ficha}" target="_blank" style="font-size:10px;background:#d4ecf9;color:#3b9dd2;padding:2px 8px;border-radius:20px;font-weight:700;text-decoration:none" onclick="event.stopPropagation()">Ver 📄</a>`:'<span style="color:#89b0c8;font-size:10px">—</span>'}</td>`;
+      if (currentTab===2) extra = `
+        <td>${recon?pill('✓ Enviado','pill-green'):pill('Pendiente','pill-red')}</td>
+        <td>${pago.status==='PAGADO'?pill('✓','pill-green'):pill('✗','pill-red')}</td>`;
+      if (currentTab===3) extra = `
+        <td>${logoD&&logoD.logo?`<a href="${logoD.logo}" target="_blank" style="font-size:10px;background:#d6f2e4;color:#1a7a4a;padding:2px 8px;border-radius:20px;font-weight:700;text-decoration:none" onclick="event.stopPropagation()">Ver 🖼</a>`:pill('Pendiente','pill-orange')}</td>
+        <td style="font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${logoD&&logoD.web?`<a href="${logoD.web.startsWith('http')?logoD.web:'https://'+logoD.web}" target="_blank" style="color:#3b9dd2;text-decoration:none" onclick="event.stopPropagation()">${logoD.web}</a>`:'<span style="color:#89b0c8">Sin página</span>'}</td>`;
+      return `<tr onclick="openModal(${allData.inscritos.indexOf(l)})">
+        <td class="td-num">${l.num||'<span style="color:#ddd;font-size:10px">—</span>'}</td>
+        <td class="td-name" title="${l.nombre}">${l.nombre}</td>
+        <td class="td-sub">${l.estado}</td>
+        <td class="td-muted">${l.empleados||'—'}</td>
+        ${extra}
+      </tr>`;
+    }).join('');
+  }
+
+  // Pagination
+  const pages = Math.ceil(filtered.length/PER);
+  const pag = document.getElementById('pag');
+  if (pages<=1) { pag.innerHTML=''; return; }
+  pag.innerHTML = `
+    <span>${filtered.length} laboratorios</span>
+    <button onclick="changePage(-1)" ${currentPage===1?'disabled':''}>‹</button>
+    <span>Página ${currentPage} de ${pages}</span>
+    <button onclick="changePage(1)" ${currentPage===pages?'disabled':''}>›</button>`;
+}
+
+function changePage(d) {
+  const pages = Math.ceil(filtered.length/PER);
+  currentPage = Math.max(1,Math.min(pages,currentPage+d));
+  renderTable();
+}
+
+function renderAlerts() {
+  // Reconocimientos
+  if (currentTab===2) {
+    const pagadosEmails = new Set(Object.keys(allData.pagos).filter(e=>allData.pagos[e].monto>=CUOTA));
+    const conReconSinPago = allData.inscritos.filter(l=>l.num&&allData.reconocidos.has(l.num)&&!pagadosEmails.has((l.email||'').toLowerCase()));
+    const conPagoSinRecon = allData.inscritos.filter(l=>l.num&&getPago(l).status==='PAGADO'&&!allData.reconocidos.has(l.num));
+    const el = document.getElementById('alert-recon');
+    if (!conReconSinPago.length && !conPagoSinRecon.length) {
+      el.innerHTML=`<div class="alert alert-green">✅ Los ${allData.reconocidos.size} reconocimientos generados coinciden con los pagos confirmados.</div>`;
+    } else {
+      let msg = '<b>⚠ Verificar coincidencias:</b>';
+      if (conReconSinPago.length) msg+=`<div style="margin-top:4px">Con reconocimiento pero sin pago: ${conReconSinPago.map(l=>`#${l.num} ${l.nombre}`).join(', ')}</div>`;
+      if (conPagoSinRecon.length) msg+=`<div style="margin-top:4px">Pago confirmado sin reconocimiento: ${conPagoSinRecon.map(l=>`#${l.num} ${l.nombre}`).join(', ')}</div>`;
+      el.innerHTML=`<div class="alert alert-amber">${msg}</div>`;
+    }
+  } else { document.getElementById('alert-recon').innerHTML=''; }
+
+  // Sin número de socio con pago
+  if (currentTab===1) {
+    const sinNum = allData.inscritos.filter(l=>!l.num&&getPago(l).status!=='SIN PAGO');
+    document.getElementById('alert-sinnum').innerHTML = sinNum.length
+      ? `<div class="alert" style="background:#d4ecf9;border:1px solid #aed6ef;color:#1a5f8a;margin-top:10px"><b>ℹ ${sinNum.length} laboratorio(s) pagaron pero no tienen N° de socio:</b> ${sinNum.map(l=>l.nombre).join(', ')}</div>`
+      : '';
+  } else { document.getElementById('alert-sinnum').innerHTML=''; }
+}
+
+function openModal(idx) {
+  const l = allData.inscritos[idx];
+  const pago  = getPago(l);
+  const recon = l.num ? allData.reconocidos.has(l.num) : false;
+  const logoD = l.num ? allData.logos[l.num] : null;
+  const initials = l.nombre.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
+
+  document.getElementById('m-avatar').textContent = initials;
+  document.getElementById('m-name').textContent = l.nombre;
+  document.getElementById('m-sub').textContent = `${l.num?'Socio N° '+l.num:'Sin número de socio'} · ${l.estado} · ${l.ciudad}`;
+
+  let body = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">';
+  if (pago.status==='PAGADO') body+=`<span class="pill pill-green">PAGADO</span>`;
+  else if (pago.status.startsWith('ABONO')) body+=`<span class="pill pill-amber">${pago.status}</span>`;
+  else body+=`<span class="pill pill-red">SIN PAGO</span>`;
+  if (pago.adeudo>0) body+=`<span class="pill pill-red">Adeudo $${pago.adeudo.toLocaleString()}</span>`;
+  body+=`<span class="pill ${recon?'pill-green':'pill-red'}">${recon?'Reconocimiento enviado':'Sin reconocimiento'}</span>`;
+  body+=`<span class="pill ${logoD?'pill-green':'pill-orange'}">${logoD?'Logo entregado':'Sin logo'}</span>`;
+  if (l.acreditado) body+=`<span class="pill pill-blue">Acreditado</span>`;
+  if (!l.num) body+=`<span class="pill pill-amber">Sin N° socio</span>`;
+  body+='</div>';
+
+  if (l.acreditado) body+=`<div class="acred-box"><b>Áreas acreditadas:</b> ${l.acreditado}</div>`;
+
+  if (pago.ficha) body+=`<div class="ficha-box">📄 <span style="color:#1a7a4a"><b>Ficha de depósito:</b> <a href="${pago.ficha}" target="_blank" style="color:#3b9dd2">Ver en Google Drive</a> · <b>$${pago.monto.toLocaleString()} depositados</b></span></div>`;
+
+  if (logoD && (logoD.logo || logoD.web)) {
+    body+=`<div class="logo-box-modal">`;
+    if (logoD.logo) body+=`<a href="${logoD.logo}" target="_blank" style="color:#3b9dd2;margin-right:12px">🖼 Ver logotipo</a>`;
+    if (logoD.web) body+=`<a href="${logoD.web.startsWith('http')?logoD.web:'https://'+logoD.web}" target="_blank" style="color:#3b9dd2">🌐 ${logoD.web}</a>`;
+    body+=`</div>`;
+  }
+
+  body+=`<div class="modal-grid">`;
+  const fields = [
+    ['Representante legal', l.rep],
+    ['Responsable técnico', l.tec],
+    ['Ciudad', l.ciudad],
+    ['Estado', l.estado],
+    ['Personal', l.empleados?l.empleados+' empleados':'—'],
+    ['Teléfono', l.tel1||l.cel||'—'],
+    ['Correo', l.email],
+    ['Mapa', l.mapa?`<a href="${l.mapa}" target="_blank" style="color:#3b9dd2">Ver ubicación 📍</a>`:'—'],
+  ];
+  fields.forEach(([label,val])=>{
+    body+=`<div><div class="field-label">${label}</div><div class="field-val">${val||'—'}</div></div>`;
+  });
+  body+='</div>';
+  document.getElementById('m-body').innerHTML = body;
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target===document.getElementById('modal')) document.getElementById('modal').classList.remove('open');
+}
+
+function printResults() {
+  const fecha = new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+  const search = document.getElementById('search').value;
+  const fEst   = document.getElementById('fEst').value;
+  const fPago  = document.getElementById('fPago').value;
+  const tabNombre = ['Inscritos','Pagos','Reconocimientos','Logo / Web'][currentTab];
+
+  const rows = filtered.map((l,i)=>{
+    const pago  = getPago(l);
+    const recon = l.num ? allData.reconocidos.has(l.num) : false;
+    const logoD = l.num ? allData.logos[l.num] : null;
+    return `<tr style="background:${i%2===0?'#fff':'#f0f7fc'}">
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;color:#89b0c8;font-weight:700">${l.num||'—'}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;font-weight:600">${l.nombre}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7">${l.estado}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7">${l.ciudad}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7">${l.empleados||'—'}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;font-size:8px">${l.acreditado||'—'}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;font-weight:700;color:${pago.status==='PAGADO'?'#1a7a4a':pago.status.startsWith('ABONO')?'#916a00':'#b83232'}">${pago.status}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;color:${pago.adeudo>0?'#b83232':'#89b0c8'}">${pago.adeudo>0?'$'+pago.adeudo.toLocaleString():'—'}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;color:${recon?'#1a7a4a':'#b83232'}">${recon?'✓ Enviado':'Pend.'}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;color:${logoD?'#1a7a4a':'#89b0c8'}">${logoD?'✓':'—'}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('print-content').innerHTML = `
+    <div style="border-bottom:2px solid #e87722;padding-bottom:10px;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:bold;color:#1a5f8a">FEDERACIÓN MEXICANA DE LABORATORIOS PARA LA CONSTRUCCIÓN</div>
+      <div style="font-size:11px;color:#e87722">Directorio de Socios 2026 — ${tabNombre}</div>
+      <div style="font-size:10px;color:#4a7fa0;margin-top:4px">
+        ${search?`Búsqueda: "<b>${search}</b>" · `:''}
+        ${fEst?`Estado: <b>${fEst}</b> · `:''}
+        ${fPago?`Pago: <b>${fPago}</b> · `:''}
+        <b>${filtered.length}</b> laboratorios · Generado el ${fecha}
+      </div>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:9.5px">
+      <thead>
+        <tr style="background:#1a5f8a">
+          ${['#','Laboratorio','Estado','Ciudad','Personal','Acreditación','Pago','Adeudo','Reconoc.','Logo']
+            .map(h=>`<th style="color:#fff;padding:5px;text-align:left;font-size:8.5px">${h}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div style="margin-top:14px;font-size:9px;color:#89b0c8;text-align:right">FEMLAC 2026 · ${filtered.length} laboratorios · ${fecha}</div>`;
+
+  document.getElementById('print-view').style.display='block';
+}
+
+// Auto-load on start
+loadData();
+</script>
+</body>
+</html>
