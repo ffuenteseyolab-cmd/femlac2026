@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEMLAC 2026 — Directorio de Socios</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f7fc;color:#0d3550;min-height:100vh}
+
+/* ── LOGIN ── */
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex}
+.login-screen{align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#1a5f8a 0%,#2478a8 60%,#3b9dd2 100%)}
+.login-box{max-width:400px;width:100%;background:#fff;border-radius:20px;padding:36px 28px;box-shadow:0 10px 40px rgba(0,0,0,.25);text-align:center}
+.login-title{color:#1a5f8a;font-size:16px;font-weight:800;line-height:1.3;margin:12px 0 4px}
+.login-sub{color:#e87722;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:22px}
+.login-hint{color:#89b0c8;font-size:12px;margin-bottom:14px}
+.key-input{width:100%;border:2px solid #aed6ef;border-radius:10px;padding:13px 14px;font-size:15px;outline:none;text-align:center;letter-spacing:3px;color:#1a5f8a;font-weight:700;margin-bottom:12px}
+.key-input:focus{border-color:#3b9dd2}
+.login-err{color:#b83232;font-size:12px;margin-top:8px;min-height:18px}
+
+/* ── MENU ── */
+.menu-screen{align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#1a5f8a 0%,#2478a8 60%,#3b9dd2 100%);flex-direction:column}
+.menu-header{text-align:center;margin-bottom:32px}
+.menu-title{color:#fff;font-size:18px;font-weight:800;line-height:1.3;margin-top:14px}
+.menu-sub{color:rgba(255,255,255,.75);font-size:12px;margin-top:6px}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;max-width:520px}
+.menu-btn{background:#fff;border:none;border-radius:16px;padding:24px 18px;cursor:pointer;text-align:center;transition:all .15s;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.menu-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.menu-btn:active{transform:translateY(0)}
+.menu-btn-icon{font-size:32px;margin-bottom:10px;display:block}
+.menu-btn-label{font-size:13px;font-weight:800;color:#1a5f8a;line-height:1.3}
+.menu-btn-count{font-size:22px;font-weight:800;margin-top:6px;display:block}
+.menu-btn-desc{font-size:10px;color:#89b0c8;margin-top:3px}
+.menu-footer{margin-top:24px;display:flex;gap:10px}
+.menu-badge{position:absolute;top:-6px;right:-6px;background:#b83232;color:#fff;border-radius:50%;width:20px;height:20px;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.menu-btn-wrap{position:relative;display:inline-block;width:100%}
+
+/* ── SECTION HEADER ── */
+.sec-header{background:linear-gradient(135deg,#1a5f8a 0%,#2478a8 60%,#3b9dd2 100%);padding:16px 20px;box-shadow:0 3px 16px rgba(26,95,138,.25)}
+.sec-header-top{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:12px;position:relative}
+.sec-header-logo{width:56px;height:56px;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;padding:4px;box-shadow:0 2px 8px rgba(0,0,0,.2);flex-shrink:0}
+.sec-header-titles{text-align:center}
+.sec-header-title{color:#fff;font-size:15px;font-weight:800;line-height:1.2}
+.sec-header-sub{color:rgba(255,255,255,.75);font-size:11px;margin-top:3px}
+.sec-nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.nav-btn{border:none;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:12px;font-weight:700;white-space:nowrap}
+.nav-home{background:rgba(255,255,255,.2);color:#fff}
+.nav-home:hover{background:rgba(255,255,255,.3)}
+.nav-exit{background:#e87722;color:#fff}
+.nav-exit:hover{background:#c96010}
+.nav-alta{background:#1a7a4a;color:#fff}
+.nav-alta:hover{background:#155f38}
+.nav-print{background:rgba(255,255,255,.15);color:#fff}
+.nav-print:hover{background:rgba(255,255,255,.25)}
+.nav-refresh{background:rgba(255,255,255,.15);color:#fff}
+.nav-refresh:hover{background:rgba(255,255,255,.25)}
+
+/* ── MAIN CONTENT ── */
+.main{max-width:1160px;margin:0 auto;padding:16px 12px 60px}
+.stats{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.stat{background:#fff;border-radius:10px;padding:10px 14px;border:1px solid #aed6ef;flex:1;min-width:110px}
+.stat-label{font-size:9.5px;color:#4a7fa0;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.stat-value{font-size:22px;font-weight:800;line-height:1}
+.stat-sub{font-size:10px;color:#89b0c8;margin-top:2px}
+.banner{border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;display:flex;align-items:center;gap:8px}
+.ban-amber{background:#fff3cc;border:1px solid #f5c49a;color:#916a00}
+.ban-blue{background:#d4ecf9;border:1px solid #aed6ef;color:#1a5f8a}
+.ban-green{background:#d6f2e4;border:1px solid #a0dcc0;color:#1a7a4a}
+.ban-red{background:#fce8e8;border:1px solid #f5a0a0;color:#b83232}
+
+/* ── FILTERS ── */
+.filters{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.filters input,.filters select{border:1px solid #aed6ef;border-radius:8px;padding:8px 10px;font-size:12px;background:#fff;color:#0d3550;outline:none}
+.filters input{flex:1;min-width:160px}
+
+/* ── BUTTONS ── */
+.btn{border:none;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:12px;font-weight:700;white-space:nowrap}
+.btn-orange{background:#e87722;color:#fff}
+.btn-blue{background:#3b9dd2;color:#fff}
+.btn-green{background:#1a7a4a;color:#fff}
+.btn-red{background:#b83232;color:#fff}
+.btn-gray{background:#f4f8fb;color:#4a7fa0;border:1px solid #aed6ef}
+.btn-amber{background:#916a00;color:#fff}
+.btn-sm{padding:4px 9px;font-size:10px;border-radius:6px}
+
+/* ── TABLE ── */
+.table-wrap{background:#fff;border-radius:12px;border:1px solid #aed6ef;overflow-x:auto;box-shadow:0 2px 12px rgba(26,95,138,.07)}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:500px}
+thead th{background:#e8f1f7;padding:8px 10px;text-align:left;font-weight:700;font-size:10px;color:#4a7fa0;border-bottom:1px solid #aed6ef;cursor:pointer;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em}
+tbody tr{border-bottom:1px solid #f4f8fb;transition:background .1s}
+tbody tr:nth-child(even){background:#f4f8fb}
+tbody tr:hover{background:#d4ecf9}
+td{padding:7px 10px;vertical-align:middle}
+
+/* ── PILLS ── */
+.pill{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700;white-space:nowrap}
+.pill-green{background:#d6f2e4;color:#1a7a4a}
+.pill-red{background:#fce8e8;color:#b83232}
+.pill-amber{background:#fff3cc;color:#916a00}
+.pill-blue{background:#d4ecf9;color:#1a5f8a}
+.pill-gray{background:#e8f1f7;color:#89b0c8}
+.pill-orange{background:#fef0e3;color:#e87722}
+
+/* ── PAGINATION ── */
+.pag{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:10px;font-size:12px;color:#4a7fa0;flex-wrap:wrap}
+.pag button{border:1px solid #aed6ef;border-radius:6px;padding:4px 10px;cursor:pointer;background:#fff;color:#3b9dd2;font-size:13px}
+.pag button:disabled{opacity:.4;cursor:default}
+
+/* ── ALERTS ── */
+.alert{margin-top:12px;border-radius:10px;padding:10px 14px;font-size:12px}
+.alert-amber{background:#fff3cc;border:1px solid #f5c49a;color:#916a00}
+.alert-green{background:#d6f2e4;border:1px solid #a0dcc0;color:#1a7a4a}
+.alert-red{background:#fce8e8;border:1px solid #f5a0a0;color:#b83232}
+
+/* ── MODALS ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,35,60,.55);z-index:100;align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:580px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.3)}
+.modal-wide{max-width:680px}
+.mhdr{padding:16px 18px 12px;border-radius:16px 16px 0 0;display:flex;align-items:center;gap:12px}
+.mhdr-blue{background:linear-gradient(135deg,#1a5f8a 0%,#2478a8 60%,#3b9dd2 100%)}
+.mhdr-green{background:linear-gradient(135deg,#1a7a4a,#2a9a5a)}
+.mhdr-red{background:linear-gradient(135deg,#b83232,#d04040)}
+.m-avatar{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0}
+.m-name{color:#fff;font-weight:700;font-size:14px;line-height:1.3}
+.m-sub{color:rgba(255,255,255,.75);font-size:11px;margin-top:2px}
+.m-close{border:1px solid rgba(255,255,255,.4);border-radius:8px;padding:5px 10px;cursor:pointer;background:rgba(255,255,255,.18);color:#fff;font-size:12px;margin-left:auto;flex-shrink:0}
+.mbody{padding:14px 18px 18px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-top:12px}
+.flabel{font-size:10px;color:#89b0c8;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.fval{font-size:12.5px;color:#0d3550;word-break:break-word}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg.full{grid-column:1/-1}
+.fg label{font-size:10.5px;color:#4a7fa0;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.fg label .opt{color:#aaa;text-transform:none;font-weight:400;font-size:10px}
+.fg input,.fg select,.fg textarea{border:1px solid #aed6ef;border-radius:8px;padding:8px 10px;font-size:12px;color:#0d3550;outline:none;background:#fff;width:100%}
+.fg textarea{resize:vertical;min-height:56px}
+.fg input:focus,.fg select:focus{border-color:#3b9dd2}
+.sec-title{color:#e87722;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin:14px 0 6px;grid-column:1/-1;border-bottom:1px solid #fef0e3;padding-bottom:4px}
+
+/* ── LOADING ── */
+.loading{text-align:center;padding:40px;color:#4a7fa0;font-size:14px}
+.spinner{display:inline-block;width:32px;height:32px;border:3px solid #aed6ef;border-top-color:#1a5f8a;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── PRINT ── */
+#print-view{display:none;position:fixed;inset:0;background:#fff;z-index:200;overflow-y:auto;padding:20px}
+
+/* ── NOTIFICATION ── */
+.notif-banner{background:#d6f2e4;border:2px solid #1a7a4a;border-radius:12px;padding:14px 18px;margin-bottom:14px;font-size:13px;color:#1a7a4a;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:520px){
+  .menu-grid{grid-template-columns:1fr 1fr;gap:12px}
+  .menu-btn{padding:18px 12px}
+  .menu-btn-icon{font-size:26px}
+  .menu-btn-label{font-size:11px}
+  .form-grid{grid-template-columns:1fr}
+  .fg.full{grid-column:1}
+  .mgrid{grid-template-columns:1fr}
+  .sec-header-title{font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ SCREEN 1: LOGIN ══════════ -->
+<div class="screen login-screen active" id="scr-login">
+  <div class="login-box">
+    <svg viewBox="0 0 100 110" width="68" height="74" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="8" r="6" fill="#f5a623"/><circle cx="50" cy="5" r="6" fill="#f5a623"/><circle cx="72" cy="8" r="6" fill="#f5a623"/>
+      <rect x="14" y="20" width="72" height="12" rx="6" fill="#f5a623"/>
+      <rect x="18" y="28" width="14" height="34" rx="7" fill="#f5a623"/>
+      <rect x="43" y="28" width="14" height="34" rx="7" fill="#f5a623"/>
+      <rect x="68" y="28" width="14" height="34" rx="7" fill="#f5a623"/>
+      <text x="50" y="80" text-anchor="middle" font-family="serif" font-weight="bold" font-size="18" fill="#f5a623">FEMLAC</text>
+      <line x1="8" y1="88" x2="92" y2="88" stroke="#f5a623" stroke-width="1.5"/>
+    </svg>
+    <div class="login-title">FEDERACIÓN MEXICANA DE LABORATORIOS PARA LA CONSTRUCCIÓN</div>
+    <div class="login-sub">Directorio de Socios 2026</div>
+    <div class="login-hint">Ingresa tu clave de acceso</div>
+    <input class="key-input" type="password" id="key-input" placeholder="••••••"
+      onkeydown="if(event.key==='Enter')checkKey()" autocomplete="off">
+    <button onclick="checkKey()" class="btn btn-blue" style="width:100%;padding:11px;font-size:14px">
+      Entrar →
+    </button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN 2: MENU ══════════ -->
+<div class="screen menu-screen" id="scr-menu">
+  <div class="menu-header">
+    <svg viewBox="0 0 100 110" width="64" height="70" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="8" r="6" fill="#fff"/><circle cx="50" cy="5" r="6" fill="#fff"/><circle cx="72" cy="8" r="6" fill="#fff"/>
+      <rect x="14" y="20" width="72" height="12" rx="6" fill="#fff"/>
+      <rect x="18" y="28" width="14" height="34" rx="7" fill="#fff"/>
+      <rect x="43" y="28" width="14" height="34" rx="7" fill="#fff"/>
+      <rect x="68" y="28" width="14" height="34" rx="7" fill="#fff"/>
+      <text x="50" y="80" text-anchor="middle" font-family="serif" font-weight="bold" font-size="18" fill="#f5a623">FEMLAC</text>
+      <line x1="8" y1="88" x2="92" y2="88" stroke="#f5a623" stroke-width="1.5"/>
+    </svg>
+    <div class="menu-title">FEDERACIÓN MEXICANA DE LABORATORIOS PARA LA CONSTRUCCIÓN</div>
+    <div class="menu-sub" id="menu-sub">Directorio de Socios 2026 · Cargando...</div>
+  </div>
+
+  <div class="menu-grid" id="menu-grid">
+    <div class="menu-btn-wrap">
+      <div class="menu-badge" id="badge-1" style="display:none">!</div>
+      <button class="menu-btn" onclick="goSection('inscritos')">
+        <span class="menu-btn-icon">📋</span>
+        <div class="menu-btn-label">Laboratorios Inscritos</div>
+        <span class="menu-btn-count" style="color:#1a5f8a" id="cnt-1">—</span>
+        <div class="menu-btn-desc">Total de registros</div>
+      </button>
+    </div>
+    <div class="menu-btn-wrap">
+      <div class="menu-badge" id="badge-2" style="display:none">!</div>
+      <button class="menu-btn" onclick="goSection('pagos')">
+        <span class="menu-btn-icon">💳</span>
+        <div class="menu-btn-label">Laboratorios Socios</div>
+        <span class="menu-btn-count" style="color:#1a7a4a" id="cnt-2">—</span>
+        <div class="menu-btn-desc">Con pago confirmado</div>
+      </button>
+    </div>
+    <div class="menu-btn-wrap">
+      <button class="menu-btn" onclick="goSection('reconocimientos')">
+        <span class="menu-btn-icon">🏅</span>
+        <div class="menu-btn-label">Laboratorios con Reconocimiento</div>
+        <span class="menu-btn-count" style="color:#e87722" id="cnt-3">—</span>
+        <div class="menu-btn-desc">Constancia generada</div>
+      </button>
+    </div>
+    <div class="menu-btn-wrap">
+      <button class="menu-btn" onclick="goSection('logos')">
+        <span class="menu-btn-icon">🌐</span>
+        <div class="menu-btn-label">Datos en Página Web</div>
+        <span class="menu-btn-count" style="color:#2478a8" id="cnt-4">—</span>
+        <div class="menu-btn-desc">Con logo o sitio web</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="menu-footer">
+    <button onclick="logout()" class="btn btn-orange" style="padding:10px 24px">🔒 Cerrar sesión</button>
+  </div>
+</div>
+
+<!-- ══════════ SCREEN 3: SECTION ══════════ -->
+<div class="screen" id="scr-section" style="flex-direction:column">
+
+  <!-- Section Header -->
+  <div class="sec-header">
+    <div class="sec-header-top">
+      <div class="sec-header-logo">
+        <svg viewBox="0 0 100 110" width="48" height="52" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="28" cy="8" r="6" fill="#f5a623"/><circle cx="50" cy="5" r="6" fill="#f5a623"/><circle cx="72" cy="8" r="6" fill="#f5a623"/>
+          <rect x="14" y="20" width="72" height="12" rx="6" fill="#f5a623"/>
+          <rect x="18" y="28" width="14" height="34" rx="7" fill="#f5a623"/>
+          <rect x="43" y="28" width="14" height="34" rx="7" fill="#f5a623"/>
+          <rect x="68" y="28" width="14" height="34" rx="7" fill="#f5a623"/>
+          <text x="50" y="80" text-anchor="middle" font-family="serif" font-weight="bold" font-size="18" fill="#f5a623">FEMLAC</text>
+          <line x1="8" y1="88" x2="92" y2="88" stroke="#f5a623" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="sec-header-titles">
+        <div class="sec-header-title">FEDERACIÓN MEXICANA DE LABORATORIOS PARA LA CONSTRUCCIÓN</div>
+        <div class="sec-header-sub" id="sec-subtitle">Directorio de Socios 2026</div>
+      </div>
+    </div>
+    <div class="sec-nav">
+      <button onclick="goMenu()" class="nav-btn nav-home">🏠 Menú</button>
+      <button onclick="openNewModal()" class="nav-btn nav-alta">➕ Alta</button>
+      <button onclick="loadData()" class="nav-btn nav-refresh">⟳ Actualizar</button>
+      <button onclick="printResults()" class="nav-btn nav-print">🖨️ Imprimir</button>
+      <button onclick="logout()" class="nav-btn nav-exit">🔒 Salir</button>
+    </div>
+  </div>
+
+  <!-- Section Content -->
+  <div class="main">
+    <div id="notif-area"></div>
+    <div id="stats-area"></div>
+    <div id="banner-area"></div>
+    <div class="filters">
+      <input type="text" id="search" placeholder="🔍 Buscar nombre, estado o ciudad…" oninput="applyFilters()">
+      <select id="fEst" onchange="applyFilters()"><option value="">Todos los estados</option></select>
+      <select id="fPago" onchange="applyFilters()" style="display:none">
+        <option value="">Todos los pagos</option>
+        <option value="PAGADO">Pagados completo</option>
+        <option value="ABONO">Con abono</option>
+      </select>
+    </div>
+    <div id="loading" class="loading" style="display:none"><div class="spinner"></div><br>Cargando datos...</div>
+    <div class="table-wrap">
+      <table><thead id="thead"></thead><tbody id="tbody"></tbody></table>
+    </div>
+    <div class="pag" id="pag"></div>
+    <div id="alert-area"></div>
+  </div>
+</div>
+
+<!-- ══════════ DETAIL MODAL ══════════ -->
+<div class="modal-bg" id="modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="mhdr mhdr-blue">
+      <div class="m-avatar" id="m-avatar"></div>
+      <div><div class="m-name" id="m-name"></div><div class="m-sub" id="m-sub"></div></div>
+      <button class="m-close" onclick="document.getElementById('modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="mbody" id="m-body"></div>
+  </div>
+</div>
+
+<!-- ══════════ FORM MODAL ══════════ -->
+<div class="modal-bg" id="form-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal modal-wide" onclick="event.stopPropagation()">
+    <div class="mhdr mhdr-green">
+      <div><div class="m-name" id="fm-title">Nuevo laboratorio</div><div class="m-sub" id="fm-sub"></div></div>
+      <button class="m-close" onclick="document.getElementById('form-modal').classList.remove('open')">✕</button>
+    </div>
+    <div class="mbody" id="fm-body"></div>
+  </div>
+</div>
+
+<!-- ══════════ PRINT VIEW ══════════ -->
+<div id="print-view">
+  <div style="margin-bottom:14px;display:flex;gap:10px">
+    <button onclick="document.getElementById('print-view').style.display='none'" class="btn btn-blue">← Volver</button>
+    <button onclick="window.print()" class="btn btn-orange">🖨️ Imprimir / PDF</button>
+  </div>
+  <div id="print-content"></div>
+</div>
+
+<script>
+/* ═══════════════════════════════
+   CONFIG
+═══════════════════════════════ */
+const ACCESS_KEY='FEMLAC';
+const CUOTA=7500;
+const BASE={
+  i:'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrn0tDIZfQhJ61iuTXt8edkH1UCvZBvHVtSad4ZkzWZjhZzxgobZYbq44I7nR0Yx3tImSUJGUodxM3/pub?gid=1482124389&single=true&output=csv',
+  p:'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrn0tDIZfQhJ61iuTXt8edkH1UCvZBvHVtSad4ZkzWZjhZzxgobZYbq44I7nR0Yx3tImSUJGUodxM3/pub?gid=1054439263&single=true&output=csv',
+  r:'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrn0tDIZfQhJ61iuTXt8edkH1UCvZBvHVtSad4ZkzWZjhZzxgobZYbq44I7nR0Yx3tImSUJGUodxM3/pub?gid=472740108&single=true&output=csv',
+  l:'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrn0tDIZfQhJ61iuTXt8edkH1UCvZBvHVtSad4ZkzWZjhZzxgobZYbq44I7nR0Yx3tImSUJGUodxM3/pub?gid=1486724500&single=true&output=csv',
+};
+function proxy(url){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(url);}
+
+/* ═══════════════════════════════
+   STATE
+═══════════════════════════════ */
+let currentSection='inscritos';
+let currentPage=1, sortKey='num', sortDir=1, filtered=[];
+const PER=15;
+
+let sheetIns=[], sheetPagos={}, sheetReconoc=new Set(), sheetLogos={};
+const gl=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}};
+const sl=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}};
+
+let localNums=gl('femlac_nums',{});
+let localManual=gl('femlac_manual',[]);
+let localDeleted=gl('femlac_deleted',[]);
+let localEdits=gl('femlac_edits',{});
+
+/* ═══════════════════════════════
+   SCREENS
+═══════════════════════════════ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.classList.remove('active');
+    s.style.display='none';
+  });
+  const el=document.getElementById(id);
+  el.style.display='flex';
+  el.classList.add('active');
+}
+
+/* ═══════════════════════════════
+   LOGIN
+═══════════════════════════════ */
+function checkKey(){
+  const v=(document.getElementById('key-input').value||'').trim().toUpperCase();
+  if(v===ACCESS_KEY){
+    document.getElementById('login-err').textContent='';
+    document.getElementById('key-input').value='';
+    showScreen('scr-menu');
+    if(!sheetIns.length) loadData();
+    else updateMenuCounts();
+  }else{
+    document.getElementById('login-err').textContent='Clave incorrecta, intenta de nuevo.';
+    document.getElementById('key-input').value='';
+    document.getElementById('key-input').focus();
+  }
+}
+function logout(){
+  showScreen('scr-login');
+  document.getElementById('key-input').value='';
+  document.getElementById('login-err').textContent='';
+  setTimeout(()=>document.getElementById('key-input').focus(),100);
+}
+function goMenu(){ showScreen('scr-menu'); updateMenuCounts(); }
+
+/* ═══════════════════════════════
+   CSV PARSER
+═══════════════════════════════ */
+function parseCSV(text){
+  const lines=text.trim().split('\n');
+  const hdrs=splitCSV(lines[0]);
+  return lines.slice(1).map(l=>{
+    const v=splitCSV(l);const o={};
+    hdrs.forEach((h,i)=>o[h.trim()]=(v[i]||'').trim());
+    return o;
+  }).filter(r=>Object.values(r).some(v=>v));
+}
+function splitCSV(line){
+  const res=[];let cur='';let q=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){q=!q;continue;}
+    if(c===','&&!q){res.push(cur);cur='';continue;}
+    cur+=c;
+  }
+  res.push(cur);return res;
+}
+
+/* ═══════════════════════════════
+   LOAD DATA
+═══════════════════════════════ */
+async function loadData(){
+  document.getElementById('loading').style.display='block';
+  try{
+    const prevIns=sheetIns.length;
+    const prevPag=Object.keys(sheetPagos).length;
+
+    const [r1,r2,r3,r4]=await Promise.all([
+      fetch(proxy(BASE.i)+'&t='+Date.now()).then(r=>r.text()),
+      fetch(proxy(BASE.p)+'&t='+Date.now()).then(r=>r.text()),
+      fetch(proxy(BASE.r)+'&t='+Date.now()).then(r=>r.text()),
+      fetch(proxy(BASE.l)+'&t='+Date.now()).then(r=>r.text()),
+    ]);
+
+    sheetIns=parseCSV(r1).map(row=>({
+      num:row['N SOCIO']?parseInt(row['N SOCIO']):null,
+      nombre:(row['NOMBRE COMERCIAL DEL LABORATORIO']||row['NOMBRE O RAZÓN SOCIAL']||'').trim(),
+      razon:(row['NOMBRE O RAZÓN SOCIAL']||'').trim(),
+      email:(row['Dirección de correo electrónico']||'').toLowerCase().trim(),
+      estado:row['ESTADO']||'',ciudad:row['CIUDAD']||'',
+      empleados:row['NUMERO DE EMPLEADOS']||'',
+      acreditado:row['ESTA ACREDITADO SEÑALAR AREAS']||'',
+      rep:row['NOMBRE REPRESENTANTE LEGAL']||'',
+      tec:row['NOMBRE RESPONSABLE TÉCNICO']||'',
+      tel:row['TELEFONOS OFICINA 1']||'',cel:row['CELULAR']||'',
+      mapa:row['LOCALIZACION DEL LABORATORIO']||'',
+      acta:row['COPIA ACTA CONSTITUTIVA (PERSONA MORAL)  INE (PERSONA FISICA)']||'',
+      fiscal:row['CONSTANCIA SITUACION FISCAL.']||'',
+      fotos:row['FOTOGRAFIAS DE LABORATORIO \n(fachada, recepción, laboratorio)']||'',
+      fuente:'sheets',
+    }));
+
+    sheetPagos={};
+    parseCSV(r2).forEach(row=>{
+      const email=(row['Dirección de correo electrónico']||'').toLowerCase().trim();
+      const ficha=row['ANEXAR FICHA DE DEPOSTIO']||'';
+      const nota=Object.values(row).join(' ');
+      let monto=7500;
+      if(nota.includes('PAGO 7000'))monto=7000;
+      else if(nota.includes('PAGO 3000'))monto=3000;
+      else if(!ficha)monto=0;
+      if(email&&ficha)sheetPagos[email]={monto,ficha,lab:row['CONFIRMACION NOMBRE COMERCIAL DEL LABORATORIO']||''};
+    });
+
+    sheetReconoc=new Set();
+    parseCSV(r3).forEach(row=>{
+      const n=parseInt(row['NO SOCIO']);
+      if(!isNaN(n)&&(row['CONSTANCIA DIGITAL SOCIO']||'').trim().toUpperCase()==='TRUE')sheetReconoc.add(n);
+    });
+
+    sheetLogos={};
+    parseCSV(r4).forEach(row=>{
+      const n=parseInt(row['NUMERO DE SOCIO']);
+      if(!isNaN(n))sheetLogos[n]={logo:row['LOGOTIPO']||'',web:row['DIRECCION DE PAGINA WEB']||''};
+    });
+
+    autoAssignNums();
+    buildEstados();
+    updateMenuCounts();
+
+    // Notifications
+    const newIns=sheetIns.length-prevIns;
+    const newPag=Object.keys(sheetPagos).length-prevPag;
+    let notif='';
+    if(newIns>0) notif+=`🆕 <b>${newIns}</b> nueva(s) inscripción(es) registradas. `;
+    if(newPag>0) notif+=`💳 <b>${newPag}</b> nuevo(s) pago(s) registrados.`;
+    if(notif&&prevIns>0){
+      document.getElementById('notif-area').innerHTML=`<div class="notif-banner">🔔 ${notif}</div>`;
+      const badge1=document.getElementById('badge-1');
+      const badge2=document.getElementById('badge-2');
+      if(newIns>0&&badge1){badge1.style.display='flex';badge1.textContent=newIns;}
+      if(newPag>0&&badge2){badge2.style.display='flex';badge2.textContent=newPag;}
+    }
+
+    const t=new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('sec-subtitle').textContent=`Directorio 2026 · ${getAllLabs().length} laboratorios · Actualizado ${t}`;
+    document.getElementById('menu-sub').textContent=`Directorio 2026 · ${getAllLabs().length} laboratorios · Actualizado ${t}`;
+    document.getElementById('loading').style.display='none';
+    applyFilters();
+  }catch(e){
+    document.getElementById('loading').innerHTML=`<div style="color:#b83232;text-align:center;padding:30px">❌ Error al cargar datos.<br><small>${e.message}</small><br><button onclick="loadData()" class="btn btn-blue" style="margin-top:10px">Reintentar</button></div>`;
+  }
+}
+
+/* ═══════════════════════════════
+   AUTO-ASSIGN NUMBERS
+═══════════════════════════════ */
+function autoAssignNums(){
+  const used=new Set();
+  sheetIns.forEach(l=>{if(l.num)used.add(l.num);});
+  localManual.forEach(l=>{if(l.num)used.add(l.num);});
+  Object.values(localNums).forEach(n=>{if(n)used.add(n);});
+  getAllLabs().forEach(l=>{
+    if(!getNum(l)&&hasPago(l)){
+      let next=1;while(used.has(next))next++;
+      localNums[l.email]=next;used.add(next);
+    }
+  });
+  sl('femlac_nums',localNums);
+}
+
+/* ═══════════════════════════════
+   HELPERS
+═══════════════════════════════ */
+function getAllLabs(){
+  const del=new Set(localDeleted);
+  const fromSheets=sheetIns.filter(l=>!del.has(l.email)).map(l=>({...l,...(localEdits[l.email]||{})}));
+  return [...fromSheets,...localManual.filter(l=>!del.has(l.email))];
+}
+function getNum(l){return l.num||localNums[l.email]||null;}
+function hasPago(l){return !!sheetPagos[(l.email||'').toLowerCase()];}
+function getPago(l){
+  const p=sheetPagos[(l.email||'').toLowerCase()]||null;
+  if(!p)return{monto:0,ficha:'',adeudo:CUOTA,status:'SIN PAGO'};
+  if(p.monto>=CUOTA)return{...p,adeudo:0,status:'PAGADO'};
+  return{...p,adeudo:CUOTA-p.monto,status:`ABONO $${p.monto.toLocaleString()}`};
+}
+function getRecon(l){const n=getNum(l);return n?sheetReconoc.has(n):false;}
+function getLogo(l){const n=getNum(l);return n?sheetLogos[n]:null;}
+function pill(t,c){return`<span class="pill ${c}">${t}</span>`;}
+function pagoChip(l){
+  const p=getPago(l);
+  if(p.status==='PAGADO')return pill('PAGADO','pill-green');
+  if(p.status.startsWith('ABONO'))return pill(p.status,'pill-amber');
+  return pill('SIN PAGO','pill-red');
+}
+function initials(s){return(s||'').split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();}
+function norm(s){return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+
+/* ═══════════════════════════════
+   MENU COUNTS
+═══════════════════════════════ */
+function updateMenuCounts(){
+  const all=getAllLabs();
+  const el1=document.getElementById('cnt-1');
+  const el2=document.getElementById('cnt-2');
+  const el3=document.getElementById('cnt-3');
+  const el4=document.getElementById('cnt-4');
+  if(el1)el1.textContent=all.length;
+  if(el2)el2.textContent=all.filter(l=>hasPago(l)).length;
+  if(el3)el3.textContent=sheetReconoc.size;
+  if(el4)el4.textContent=Object.values(sheetLogos).filter(l=>l.logo||l.web).length;
+}
+
+/* ═══════════════════════════════
+   SECTION NAVIGATION
+═══════════════════════════════ */
+function goSection(sec){
+  currentSection=sec;
+  currentPage=1;
+  sortKey='num';sortDir=1;
+
+  const titles={
+    inscritos:'📋 Laboratorios Inscritos',
+    pagos:'💳 Laboratorios Socios (Pagados)',
+    reconocimientos:'🏅 Laboratorios con Reconocimiento',
+    logos:'🌐 Laboratorios con Datos en Página Web',
+  };
+  document.getElementById('sec-subtitle').textContent=titles[sec]||sec;
+  document.getElementById('fPago').style.display=sec==='pagos'?'inline-block':'none';
+  document.getElementById('notif-area').innerHTML='';
+
+  // Hide badges when entering section
+  if(sec==='inscritos'){const b=document.getElementById('badge-1');if(b)b.style.display='none';}
+  if(sec==='pagos'){const b=document.getElementById('badge-2');if(b)b.style.display='none';}
+
+  showScreen('scr-section');
+  buildEstados();
+  applyFilters();
+}
+
+/* ═══════════════════════════════
+   ESTADOS
+═══════════════════════════════ */
+function buildEstados(){
+  const sel=document.getElementById('fEst');
+  const cur=sel.value;
+  const map={};
+  getAllLabs().forEach(l=>{
+    const k=norm(l.estado);
+    if(k&&!map[k])map[k]=l.estado.toUpperCase().trim();
+  });
+  const estados=Object.values(map).sort((a,b)=>a.localeCompare(b,'es'));
+  sel.innerHTML='<option value="">Todos los estados</option>'+
+    estados.map(e=>`<option value="${e}" ${e===cur?'selected':''}>${e}</option>`).join('');
+}
+
+/* ═══════════════════════════════
+   FILTERS
+═══════════════════════════════ */
+function applyFilters(){
+  const q=norm(document.getElementById('search').value);
+  const est=norm(document.getElementById('fEst').value);
+  const pag=document.getElementById('fPago').value;
+  const all=getAllLabs();
+
+  filtered=all.filter(l=>{
+    if(q&&!norm(l.nombre).includes(q)&&!norm(l.estado).includes(q)&&!norm(l.ciudad).includes(q)&&!norm(l.razon||'').includes(q))return false;
+    if(est&&norm(l.estado)!==est)return false;
+    if(currentSection==='pagos'){
+      if(!hasPago(l))return false;
+      if(pag==='PAGADO'&&getPago(l).status!=='PAGADO')return false;
+      if(pag==='ABONO'&&!getPago(l).status.startsWith('ABONO'))return false;
+    }
+    if(currentSection==='reconocimientos'&&!getRecon(l))return false;
+    if(currentSection==='logos'){const ld=getLogo(l);if(!ld||(!ld.logo&&!ld.web))return false;}
+    return true;
+  });
+
+  filtered.sort((a,b)=>{
+    const na=getNum(a),nb=getNum(b);
+    if(sortKey==='num'){if(na===null&&nb===null)return 0;if(na===null)return 1;if(nb===null)return -1;return(na-nb)*sortDir;}
+    return norm(String(a[sortKey]||'')).localeCompare(norm(String(b[sortKey]||'')),'es')*sortDir;
+  });
+
+  currentPage=1;
+  renderStats();renderTable();renderAlerts();
+}
+
+function srt(k){if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1;}applyFilters();}
+function arr(k){return sortKey===k?(sortDir===1?' ↑':' ↓'):'';}
+
+/* ═══════════════════════════════
+   STATS
+═══════════════════════════════ */
+function renderStats(){
+  const all=getAllLabs();
+  let items=[];
+
+  if(currentSection==='inscritos'){
+    items=[
+      {l:'Total inscritos',v:all.length,c:'#3b9dd2',s:'laboratorios'},
+      {l:'Con N° socio',v:all.filter(l=>getNum(l)).length,c:'#1a5f8a',s:'asignados'},
+      {l:'Sin N° socio',v:all.filter(l=>!getNum(l)).length,c:'#89b0c8',s:'pendientes'},
+      {l:'Acreditados',v:all.filter(l=>l.acreditado).length,c:'#e87722',s:'laboratorios'},
+      {l:'Estados',v:new Set(all.map(l=>norm(l.estado)).filter(Boolean)).size,c:'#2478a8',s:'representados'},
+    ];
+  }else if(currentSection==='pagos'){
+    const adeudoT=all.reduce((s,l)=>s+getPago(l).adeudo,0);
+    items=[
+      {l:'Con pago registrado',v:all.filter(l=>hasPago(l)).length,c:'#1a5f8a',s:'laboratorios'},
+      {l:'Pagados completo',v:all.filter(l=>getPago(l).status==='PAGADO').length,c:'#1a7a4a',s:'$7,500'},
+      {l:'Con abono',v:all.filter(l=>getPago(l).status.startsWith('ABONO')).length,c:'#916a00',s:'parcial'},
+      {l:'Adeudo total',v:'$'+adeudoT.toLocaleString(),c:'#b83232',s:'MXN pendiente'},
+    ];
+  }else if(currentSection==='reconocimientos'){
+    const tr=sheetReconoc.size;
+    const cp=[...sheetReconoc].filter(n=>{const l=all.find(x=>getNum(x)===n);return l&&getPago(l).status==='PAGADO';}).length;
+    items=[
+      {l:'Reconocimientos',v:tr,c:'#1a5f8a',s:'generados'},
+      {l:'Con pago OK',v:cp,c:'#1a7a4a',s:'coincidencia'},
+      {l:'Sin pago',v:tr-cp,c:'#b83232',s:'verificar'},
+    ];
+  }else if(currentSection==='logos'){
+    const lv=Object.values(sheetLogos);
+    items=[
+      {l:'Con logo',v:lv.filter(l=>l.logo).length,c:'#1a5f8a',s:'entregados'},
+      {l:'Con web',v:lv.filter(l=>l.web).length,c:'#e87722',s:'registradas'},
+      {l:'Logo + Web',v:lv.filter(l=>l.logo&&l.web).length,c:'#1a7a4a',s:'completos'},
+    ];
+  }
+
+  document.getElementById('stats-area').innerHTML=`<div class="stats">${items.map(s=>`<div class="stat"><div class="stat-label">${s.l}</div><div class="stat-value" style="color:${s.c}">${s.v}</div><div class="stat-sub">${s.s}</div></div>`).join('')}</div>`;
+
+  let banners='';
+  if(currentSection==='pagos'){
+    const adeudoT=all.reduce((s,l)=>s+getPago(l).adeudo,0);
+    if(adeudoT>0)banners+=`<div class="banner ban-amber">💰 <span><b>Adeudo total: $${adeudoT.toLocaleString()} MXN</b> pendiente de cobro.</span></div>`;
+    const autoN=all.filter(l=>!l.num&&localNums[l.email]&&hasPago(l));
+    if(autoN.length)banners+=`<div class="banner ban-blue">🔢 <b>${autoN.length}</b> laboratorio(s) con número asignado automáticamente al pagar.</div>`;
+  }
+  document.getElementById('banner-area').innerHTML=banners;
+}
+
+/* ═══════════════════════════════
+   TABLE
+═══════════════════════════════ */
+function renderTable(){
+  const start=(currentPage-1)*PER;
+  const page=filtered.slice(start,start+PER);
+
+  let heads=`<th onclick="srt('num')">#${arr('num')}</th>
+    <th onclick="srt('nombre')">Laboratorio${arr('nombre')}</th>
+    <th onclick="srt('estado')">Estado${arr('estado')}</th>
+    <th>Personal</th>`;
+  if(currentSection==='inscritos')heads+=`<th>Acreditación</th>`;
+  if(currentSection==='pagos')heads+=`<th>Pago</th><th>Adeudo</th><th>Ficha</th>`;
+  if(currentSection==='reconocimientos')heads+=`<th>Reconocimiento</th><th>Pago OK</th>`;
+  if(currentSection==='logos')heads+=`<th>Logo</th><th>Página web</th>`;
+  heads+=`<th style="text-align:center">Acciones</th>`;
+  document.getElementById('thead').innerHTML=`<tr>${heads}</tr>`;
+
+  if(!page.length){
+    document.getElementById('tbody').innerHTML=`<tr><td colspan="10" style="padding:2rem;text-align:center;color:#89b0c8">Sin resultados.</td></tr>`;
+  }else{
+    document.getElementById('tbody').innerHTML=page.map(l=>{
+      const num=getNum(l),pago=getPago(l),recon=getRecon(l),logoD=getLogo(l);
+      const autoN=!l.num&&localNums[l.email]?' 🔢':'';
+      let extra='';
+      if(currentSection==='inscritos')extra=`<td>${l.acreditado?pill('Acreditado','pill-blue'):pill('No','pill-gray')}</td>`;
+      if(currentSection==='pagos')extra=`
+        <td>${pagoChip(l)}</td>
+        <td style="font-weight:${pago.adeudo>0?700:400};color:${pago.adeudo>0?'#b83232':'#89b0c8'}">${pago.adeudo>0?'$'+pago.adeudo.toLocaleString():'—'}</td>
+        <td>${pago.ficha?`<a href="${pago.ficha}" target="_blank" onclick="event.stopPropagation()" style="font-size:10px;background:#d4ecf9;color:#3b9dd2;padding:2px 8px;border-radius:20px;font-weight:700;text-decoration:none">Ver 📄</a>`:'<span style="color:#89b0c8;font-size:10px">—</span>'}</td>`;
+      if(currentSection==='reconocimientos')extra=`
+        <td>${recon?pill('✓ Enviado','pill-green'):pill('Pendiente','pill-red')}</td>
+        <td>${pago.status==='PAGADO'?pill('✓','pill-green'):pill('✗','pill-red')}</td>`;
+      if(currentSection==='logos')extra=`
+        <td>${logoD&&logoD.logo?`<a href="${logoD.logo}" target="_blank" onclick="event.stopPropagation()" style="font-size:10px;background:#d6f2e4;color:#1a7a4a;padding:2px 8px;border-radius:20px;font-weight:700;text-decoration:none">Ver 🖼</a>`:pill('—','pill-gray')}</td>
+        <td style="font-size:11px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${logoD&&logoD.web?`<a href="${logoD.web.startsWith('http')?logoD.web:'https://'+logoD.web}" target="_blank" onclick="event.stopPropagation()" style="color:#3b9dd2;text-decoration:none">${logoD.web}</a>`:'<span style="color:#89b0c8">—</span>'}</td>`;
+
+      return `<tr>
+        <td style="color:#89b0c8;font-weight:700;font-size:11px;cursor:pointer" onclick="openModal('${l.email}')">${num||'—'}${autoN}</td>
+        <td style="font-weight:600;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer" onclick="openModal('${l.email}')" title="${l.nombre}">${l.nombre}</td>
+        <td style="color:#4a7fa0;font-size:11.5px;cursor:pointer" onclick="openModal('${l.email}')">${l.estado}</td>
+        <td style="color:#89b0c8;font-size:11px;cursor:pointer" onclick="openModal('${l.email}')">${l.empleados||'—'}</td>
+        ${extra}
+        <td style="text-align:center;white-space:nowrap">
+          <button onclick="openEditModal('${l.email}')" class="btn btn-blue btn-sm" style="margin-right:3px">✏️</button>
+          <button onclick="deleteLab('${l.email}','${l.nombre.replace(/'/g,"\\'")}','${l.fuente||'sheets'}')" class="btn btn-red btn-sm">🗑</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  const pages=Math.ceil(filtered.length/PER);
+  const pag=document.getElementById('pag');
+  if(pages<=1){pag.innerHTML='';return;}
+  pag.innerHTML=`<span>${filtered.length} registros</span>
+    <button onclick="changePg(-1)" ${currentPage===1?'disabled':''}>‹</button>
+    <span>Pág. ${currentPage} / ${pages}</span>
+    <button onclick="changePg(1)" ${currentPage===pages?'disabled':''}>›</button>`;
+}
+function changePg(d){const p=Math.ceil(filtered.length/PER);currentPage=Math.max(1,Math.min(p,currentPage+d));renderTable();}
+
+/* ═══════════════════════════════
+   ALERTS
+═══════════════════════════════ */
+function renderAlerts(){
+  let html='';
+  const all=getAllLabs();
+  if(currentSection==='reconocimientos'){
+    const pn=new Set(all.filter(l=>getPago(l).status==='PAGADO').map(l=>getNum(l)).filter(Boolean));
+    const sp=[...sheetReconoc].filter(n=>!pn.has(n));
+    const sr=all.filter(l=>getNum(l)&&getPago(l).status==='PAGADO'&&!sheetReconoc.has(getNum(l)));
+    if(!sp.length&&!sr.length)html=`<div class="alert alert-green">✅ Los ${sheetReconoc.size} reconocimientos coinciden con los pagos.</div>`;
+    else{let m='<b>⚠ Verificar:</b>';if(sp.length)m+=`<div>Reconocimiento sin pago: #${sp.join(', #')}</div>`;if(sr.length)m+=`<div>Pagados sin reconocimiento: ${sr.map(l=>l.nombre).join(', ')}</div>`;html=`<div class="alert alert-amber">${m}</div>`;}
+  }
+  document.getElementById('alert-area').innerHTML=html;
+}
+
+/* ═══════════════════════════════
+   DETAIL MODAL
+═══════════════════════════════ */
+function openModal(email){
+  const l=getAllLabs().find(x=>x.email===email);
+  if(!l)return;
+  const num=getNum(l),pago=getPago(l),recon=getRecon(l),logoD=getLogo(l);
+  document.getElementById('m-avatar').textContent=initials(l.nombre);
+  document.getElementById('m-name').textContent=l.nombre;
+  document.getElementById('m-sub').textContent=`${num?'Socio N° '+num+(localNums[l.email]?' (auto)':''):'Sin número'} · ${l.estado} · ${l.ciudad}`;
+
+  let b=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">`;
+  if(pago.status==='PAGADO')b+=pill('PAGADO','pill-green');
+  else if(pago.status.startsWith('ABONO'))b+=pill(pago.status,'pill-amber');
+  else b+=pill('SIN PAGO','pill-red');
+  if(pago.adeudo>0)b+=pill('Adeudo $'+pago.adeudo.toLocaleString(),'pill-red');
+  b+=pill(recon?'Reconocimiento enviado':'Sin reconocimiento',recon?'pill-green':'pill-red');
+  b+=pill(logoD?'Logo entregado':'Sin logo',logoD?'pill-green':'pill-orange');
+  if(l.acreditado)b+=pill('Acreditado','pill-blue');
+  if(!num)b+=pill('Sin N° socio','pill-amber');
+  b+=`</div>`;
+
+  if(l.acreditado)b+=`<div style="background:#d4ecf9;border:1px solid #aed6ef;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px;color:#1a5f8a"><b>Áreas acreditadas:</b> ${l.acreditado}</div>`;
+  if(pago.ficha)b+=`<div style="background:#d6f2e4;border:1px solid #a0dcc0;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px">📄 <b style="color:#1a7a4a">Ficha:</b> <a href="${pago.ficha}" target="_blank" style="color:#3b9dd2">Ver en Drive</a> · <b style="color:#1a7a4a">$${pago.monto.toLocaleString()}</b></div>`;
+  if(logoD&&(logoD.logo||logoD.web))b+=`<div style="background:#f4f8fb;border:1px solid #aed6ef;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px">${logoD.logo?`<a href="${logoD.logo}" target="_blank" style="color:#3b9dd2;margin-right:12px">🖼 Logotipo</a>`:''}${logoD.web?`<a href="${logoD.web.startsWith('http')?logoD.web:'https://'+logoD.web}" target="_blank" style="color:#3b9dd2">🌐 ${logoD.web}</a>`:''}</div>`;
+
+  const docs=[];
+  if(l.acta)docs.push(['Acta/INE',l.acta]);
+  if(l.fiscal)docs.push(['Constancia fiscal',l.fiscal]);
+  if(l.fotos)docs.push(['Fotografías',l.fotos]);
+  if(l.mapa)docs.push(['Ubicación',l.mapa]);
+  if(docs.length)b+=`<div style="background:#fef0e3;border:1px solid #f5c49a;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:12px"><b style="color:#e87722">📎 Documentos:</b><br>${docs.map(([lb,url])=>`<a href="${url}" target="_blank" style="color:#3b9dd2;margin-right:10px;display:inline-block;margin-top:4px">${lb} ↗</a>`).join('')}</div>`;
+
+  b+=`<div class="mgrid">`;
+  [['Rep. Legal',l.rep],['Resp. Técnico',l.tec],['Ciudad',l.ciudad],['Estado',l.estado],
+   ['Personal',l.empleados||'—'],['Teléfono',l.tel||l.cel||'—'],['Correo',l.email],
+   ['Fuente',l.fuente==='manual'?'Alta manual':'Google Forms']
+  ].forEach(([lb,val])=>b+=`<div><div class="flabel">${lb}</div><div class="fval">${val||'—'}</div></div>`);
+  b+=`</div>`;
+  b+=`<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+    <button onclick="document.getElementById('modal').classList.remove('open');openEditModal('${email}')" class="btn btn-blue btn-sm">✏️ Editar</button>
+    <button onclick="document.getElementById('modal').classList.remove('open');deleteLab('${email}','${l.nombre.replace(/'/g,"\\'")}','${l.fuente||'sheets'}')" class="btn btn-red btn-sm">🗑 Eliminar</button>
+  </div>`;
+  document.getElementById('m-body').innerHTML=b;
+  document.getElementById('modal').classList.add('open');
+}
+
+/* ═══════════════════════════════
+   FORM FIELDS
+═══════════════════════════════ */
+function formFields(d={}){
+  return `<div class="form-grid">
+    <div class="fg"><label>Nombre comercial *</label><input id="f-nombre" value="${(d.nombre||'').replace(/"/g,'&quot;')}" placeholder="Nombre del laboratorio"></div>
+    <div class="fg"><label>Razón social</label><input id="f-razon" value="${(d.razon||'').replace(/"/g,'&quot;')}" placeholder="Razón social" oninput="this.value=this.value.toUpperCase()"></div>
+    <div class="fg"><label>Correo *</label><input type="email" id="f-email" value="${d.email||''}" placeholder="correo@ejemplo.com" ${d.email?'readonly style="background:#f4f8fb"':''}></div>
+    <div class="fg"><label>N° de socio <span class="opt">(vacío=auto)</span></label><input type="number" id="f-num" value="${d._num||''}" placeholder="Dejar vacío"></div>
+    <div class="fg"><label>Estado *</label><input id="f-estado" value="${(d.estado||'').toUpperCase()}" placeholder="ESTADO" oninput="this.value=this.value.toUpperCase()"></div>
+    <div class="fg"><label>Ciudad</label><input id="f-ciudad" value="${(d.ciudad||'').toUpperCase()}" placeholder="CIUDAD" oninput="this.value=this.value.toUpperCase()"></div>
+    <div class="fg"><label>Personal</label>
+      <select id="f-emp"><option value="">Seleccionar</option>
+        ${['DE 1 A 10','DE 11 A 50','DE 51 A 250','+ DE 251'].map(o=>`<option ${(d.empleados||'')==o?'selected':''}>${o}</option>`).join('')}
+      </select>
+    </div>
+    <div class="fg"><label>Teléfono</label><input id="f-tel" value="${d.tel||d.cel||''}" placeholder="10 dígitos"></div>
+    <div class="fg"><label>Representante legal</label><input id="f-rep" value="${(d.rep||'').replace(/"/g,'&quot;')}" oninput="this.value=this.value.toUpperCase()"></div>
+    <div class="fg"><label>Responsable técnico</label><input id="f-tec" value="${(d.tec||'').replace(/"/g,'&quot;')}" oninput="this.value=this.value.toUpperCase()"></div>
+    <div class="fg full"><label>Áreas acreditadas</label><input id="f-acred" value="${(d.acreditado||'').replace(/"/g,'&quot;')}" placeholder="CONCRETO, TERRACERIAS..." oninput="this.value=this.value.toUpperCase()"></div>
+    <div class="sec-title">📎 Documentos — enlace Google Drive</div>
+    <div class="fg"><label>Mapa / Ubicación</label><input type="url" id="f-mapa" value="${d.mapa||''}" placeholder="https://maps.app.goo.gl/..."></div>
+    <div class="fg"><label>Acta constitutiva / INE</label><input type="url" id="f-acta" value="${d.acta||''}" placeholder="https://drive.google.com/..."></div>
+    <div class="fg"><label>Constancia fiscal</label><input type="url" id="f-fiscal" value="${d.fiscal||''}" placeholder="https://drive.google.com/..."></div>
+    <div class="fg"><label>Fotografías</label><input type="url" id="f-fotos" value="${d.fotos||''}" placeholder="https://drive.google.com/..."></div>
+    <div class="sec-title">💳 Pago</div>
+    <div class="fg"><label>Ficha de depósito</label><input type="url" id="f-ficha" value="${d._ficha||''}" placeholder="https://drive.google.com/..."></div>
+    <div class="fg"><label>Monto depositado (MXN)</label><input type="number" id="f-monto" value="${d._monto||''}" placeholder="7500"></div>
+    <div class="sec-title">🖼 Logo y presencia digital</div>
+    <div class="fg"><label>Logotipo</label><input type="url" id="f-logo" value="${d._logo||''}" placeholder="https://drive.google.com/..."></div>
+    <div class="fg"><label>Página web</label><input id="f-web" value="${d._web||''}" placeholder="www.ejemplo.com"></div>
+  </div>`;
+}
+
+function getFormData(){
+  return{
+    nombre:document.getElementById('f-nombre').value.trim(),
+    razon:document.getElementById('f-razon').value.trim(),
+    email:(document.getElementById('f-email').value||'').trim().toLowerCase(),
+    _num:document.getElementById('f-num').value.trim(),
+    estado:document.getElementById('f-estado').value.trim(),
+    ciudad:document.getElementById('f-ciudad').value.trim(),
+    empleados:document.getElementById('f-emp').value,
+    tel:document.getElementById('f-tel').value.trim(),
+    rep:document.getElementById('f-rep').value.trim(),
+    tec:document.getElementById('f-tec').value.trim(),
+    acreditado:document.getElementById('f-acred').value.trim(),
+    mapa:document.getElementById('f-mapa').value.trim(),
+    acta:document.getElementById('f-acta').value.trim(),
+    fiscal:document.getElementById('f-fiscal').value.trim(),
+    fotos:document.getElementById('f-fotos').value.trim(),
+    _ficha:document.getElementById('f-ficha').value.trim(),
+    _monto:document.getElementById('f-monto').value.trim(),
+    _logo:document.getElementById('f-logo').value.trim(),
+    _web:document.getElementById('f-web').value.trim(),
+  };
+}
+
+/* ═══════════════════════════════
+   ALTA
+═══════════════════════════════ */
+function openNewModal(){
+  document.getElementById('fm-title').textContent='➕ Alta de nuevo laboratorio';
+  document.getElementById('fm-sub').textContent='';
+  document.getElementById('fm-body').innerHTML=`${formFields()}
+    <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+      <button onclick="saveNew()" class="btn btn-green">✓ Guardar laboratorio</button>
+      <button onclick="document.getElementById('form-modal').classList.remove('open')" class="btn btn-gray">Cancelar</button>
+    </div>
+    <div id="fm-msg" style="margin-top:8px;font-size:12px"></div>`;
+  document.getElementById('form-modal').classList.add('open');
+}
+
+function saveNew(){
+  const d=getFormData();
+  const msg=document.getElementById('fm-msg');
+  if(!d.nombre||!d.email||!d.estado){msg.innerHTML='<span style="color:#b83232">⚠ Nombre, correo y estado son obligatorios.</span>';return;}
+  if(getAllLabs().find(l=>l.email===d.email)){msg.innerHTML='<span style="color:#b83232">⚠ Ya existe un laboratorio con ese correo.</span>';return;}
+
+  const lab={num:d._num?parseInt(d._num):null,nombre:d.nombre,razon:d.razon,email:d.email,
+    estado:d.estado,ciudad:d.ciudad,empleados:d.empleados,tel:d.tel,cel:'',
+    rep:d.rep,tec:d.tec,acreditado:d.acreditado,mapa:d.mapa,acta:d.acta,
+    fiscal:d.fiscal,fotos:d.fotos,fuente:'manual'};
+  localManual.push(lab);sl('femlac_manual',localManual);
+
+  if(d._ficha)sheetPagos[d.email]={monto:d._monto?parseInt(d._monto):7500,ficha:d._ficha,lab:d.nombre};
+  autoAssignNums();
+  const assignedNum=getNum(lab)||d._num;
+  if(assignedNum&&(d._logo||d._web))sheetLogos[parseInt(assignedNum)]={logo:d._logo,web:d._web};
+
+  msg.innerHTML='<span style="color:#1a7a4a">✓ Laboratorio agregado.</span>';
+  updateMenuCounts();applyFilters();
+  setTimeout(()=>document.getElementById('form-modal').classList.remove('open'),800);
+}
+
+/* ═══════════════════════════════
+   EDITAR
+═══════════════════════════════ */
+function openEditModal(email){
+  const l=getAllLabs().find(x=>x.email===email);
+  if(!l)return;
+  const num=getNum(l),pago=getPago(l),logoD=getLogo(l)||{};
+  document.getElementById('fm-title').textContent='✏️ Editar laboratorio';
+  document.getElementById('fm-sub').textContent=l.nombre;
+  const d={...l,_num:num||'',_ficha:pago.ficha||'',_monto:pago.monto||'',_logo:logoD.logo||'',_web:logoD.web||''};
+  document.getElementById('fm-body').innerHTML=`${formFields(d)}
+    <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+      <button onclick="saveEdit('${email}')" class="btn btn-green">✓ Guardar cambios</button>
+      <button onclick="document.getElementById('form-modal').classList.remove('open')" class="btn btn-gray">Cancelar</button>
+    </div>
+    <div id="fm-msg" style="margin-top:8px;font-size:12px"></div>`;
+  document.getElementById('form-modal').classList.add('open');
+}
+
+function saveEdit(email){
+  const d=getFormData();
+  const msg=document.getElementById('fm-msg');
+  if(!d.nombre){msg.innerHTML='<span style="color:#b83232">El nombre es obligatorio.</span>';return;}
+
+  if(!localEdits[email])localEdits[email]={};
+  Object.assign(localEdits[email],{nombre:d.nombre,razon:d.razon,estado:d.estado,
+    ciudad:d.ciudad,rep:d.rep,tec:d.tec,tel:d.tel,empleados:d.empleados,acreditado:d.acreditado,
+    mapa:d.mapa,acta:d.acta,fiscal:d.fiscal,fotos:d.fotos});
+  sl('femlac_edits',localEdits);
+
+  if(d._num){localNums[email]=parseInt(d._num);sl('femlac_nums',localNums);}
+  else if(localNums[email]){delete localNums[email];sl('femlac_nums',localNums);}
+
+  if(d._ficha)sheetPagos[email]={monto:d._monto?parseInt(d._monto):7500,ficha:d._ficha,lab:d.nombre};
+
+  const finalNum=d._num?parseInt(d._num):getNum({email,num:null});
+  if(finalNum&&(d._logo||d._web))sheetLogos[finalNum]={logo:d._logo,web:d._web};
+
+  const mi=localManual.findIndex(l=>l.email===email);
+  if(mi>=0){localManual[mi]={...localManual[mi],...localEdits[email]};sl('femlac_manual',localManual);}
+
+  msg.innerHTML='<span style="color:#1a7a4a">✓ Guardado.</span>';
+  updateMenuCounts();applyFilters();
+  setTimeout(()=>document.getElementById('form-modal').classList.remove('open'),800);
+}
+
+/* ═══════════════════════════════
+   BAJA
+═══════════════════════════════ */
+function deleteLab(email,nombre,fuente){
+  if(!confirm(`¿Eliminar "${nombre}"?\n\nSe quitará del directorio.\nNo afecta Google Sheets.`))return;
+  if(!localDeleted.includes(email)){localDeleted.push(email);sl('femlac_deleted',localDeleted);}
+  if(fuente==='manual'){localManual=localManual.filter(l=>l.email!==email);sl('femlac_manual',localManual);}
+  if(localNums[email]){delete localNums[email];sl('femlac_nums',localNums);}
+  updateMenuCounts();applyFilters();
+}
+
+/* ═══════════════════════════════
+   PRINT
+═══════════════════════════════ */
+function printResults(){
+  const fecha=new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+  const secNames={inscritos:'Laboratorios Inscritos',pagos:'Laboratorios Socios (Pagados)',reconocimientos:'Laboratorios con Reconocimiento',logos:'Datos en Página Web'};
+  const rows=filtered.map((l,i)=>{
+    const num=getNum(l),pago=getPago(l),recon=getRecon(l),logoD=getLogo(l);
+    return`<tr style="background:${i%2===0?'#fff':'#f0f7fc'}">
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;color:#89b0c8;font-weight:700">${num||'—'}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;font-weight:600">${l.nombre}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7">${l.estado}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7">${l.ciudad||'—'}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;font-size:8px">${l.acreditado||'—'}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;font-weight:700;color:${pago.status==='PAGADO'?'#1a7a4a':pago.status.startsWith('ABONO')?'#916a00':'#b83232'}">${pago.status}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;color:${pago.adeudo>0?'#b83232':'#89b0c8'}">${pago.adeudo>0?'$'+pago.adeudo.toLocaleString():'—'}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;color:${recon?'#1a7a4a':'#b83232'}">${recon?'✓':'—'}</td>
+      <td style="padding:3px 5px;border-bottom:1px solid #e8f1f7;color:${logoD?'#1a7a4a':'#89b0c8'}">${logoD?'✓':'—'}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('print-content').innerHTML=`
+    <div style="border-bottom:2px solid #e87722;padding-bottom:10px;margin-bottom:12px;text-align:center">
+      <div style="font-size:14px;font-weight:bold;color:#1a5f8a">FEDERACIÓN MEXICANA DE LABORATORIOS PARA LA CONSTRUCCIÓN</div>
+      <div style="font-size:11px;color:#e87722;margin-top:2px">${secNames[currentSection]} — 2026</div>
+      <div style="font-size:10px;color:#4a7fa0;margin-top:4px"><b>${filtered.length}</b> registros · ${fecha}</div>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:9.5px">
+      <thead><tr style="background:#1a5f8a">
+        ${['#','Laboratorio','Estado','Ciudad','Acreditación','Pago','Adeudo','Reconoc.','Logo']
+          .map(h=>`<th style="color:#fff;padding:5px;text-align:left;font-size:8.5px">${h}</th>`).join('')}
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div style="margin-top:14px;font-size:9px;color:#89b0c8;text-align:right">FEMLAC 2026 · ${filtered.length} registros · ${fecha}</div>`;
+  document.getElementById('print-view').style.display='block';
+}
+
+/* ═══════════════════════════════
+   INIT — always show login
+═══════════════════════════════ */
+document.addEventListener('DOMContentLoaded',()=>{
+  showScreen('scr-login');
+  setTimeout(()=>{const el=document.getElementById('key-input');if(el)el.focus();},100);
+});
+</script>
+</body>
+</html>
