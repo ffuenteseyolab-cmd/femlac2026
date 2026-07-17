@@ -25,17 +25,17 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f7fc;color:#0d3550;mi
 .menu-header{text-align:center;margin-bottom:32px}
 .menu-title{color:#fff;font-size:18px;font-weight:800;line-height:1.3;margin-top:14px}
 .menu-sub{color:rgba(255,255,255,.75);font-size:12px;margin-top:6px}
-.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;max-width:520px}
-.menu-btn{background:#fff;border:none;border-radius:16px;padding:24px 18px;cursor:pointer;text-align:center;transition:all .15s;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.menu-grid{display:grid;grid-template-columns:1fr;gap:14px;width:100%;max-width:420px}
+.menu-btn{background:#fff;border:none;border-radius:16px;padding:18px 24px;cursor:pointer;text-align:left;transition:all .15s;box-shadow:0 4px 16px rgba(0,0,0,.15);display:flex;align-items:center;gap:18px;width:100%}
 .menu-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
 .menu-btn:active{transform:translateY(0)}
-.menu-btn-icon{font-size:32px;margin-bottom:10px;display:block}
-.menu-btn-label{font-size:13px;font-weight:800;color:#1a5f8a;line-height:1.3}
-.menu-btn-count{font-size:22px;font-weight:800;margin-top:6px;display:block}
-.menu-btn-desc{font-size:10px;color:#89b0c8;margin-top:3px}
+.menu-btn-icon{font-size:36px;flex-shrink:0}
+.menu-btn-label{font-size:14px;font-weight:800;color:#1a5f8a;line-height:1.3;flex:1}
+.menu-btn-count{font-size:28px;font-weight:800;color:#1a5f8a;flex-shrink:0}
+.menu-btn-desc{font-size:10px;color:#89b0c8;margin-top:2px;font-weight:400}
 .menu-footer{margin-top:24px;display:flex;gap:10px}
 .menu-badge{position:absolute;top:-6px;right:-6px;background:#b83232;color:#fff;border-radius:50%;width:20px;height:20px;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
-.menu-btn-wrap{position:relative;display:inline-block;width:100%}
+.menu-btn-wrap{position:relative;display:block;width:100%}
 
 /* ── SECTION HEADER ── */
 .sec-header{background:linear-gradient(135deg,#1a5f8a 0%,#2478a8 60%,#3b9dd2 100%);padding:16px 20px;box-shadow:0 3px 16px rgba(26,95,138,.25)}
@@ -157,10 +157,10 @@ td{padding:7px 10px;vertical-align:middle}
 
 /* ── RESPONSIVE ── */
 @media(max-width:520px){
-  .menu-grid{grid-template-columns:1fr 1fr;gap:12px}
-  .menu-btn{padding:18px 12px}
-  .menu-btn-icon{font-size:26px}
-  .menu-btn-label{font-size:11px}
+  .menu-grid{grid-template-columns:1fr;gap:12px}
+  .menu-btn{padding:14px 18px}
+  .menu-btn-icon{font-size:28px}
+  .menu-btn-label{font-size:13px}
   .form-grid{grid-template-columns:1fr}
   .fg.full{grid-column:1}
   .mgrid{grid-template-columns:1fr}
@@ -215,34 +215,30 @@ td{padding:7px 10px;vertical-align:middle}
       <div class="menu-badge" id="badge-1" style="display:none">!</div>
       <button class="menu-btn" onclick="goSection('inscritos')">
         <span class="menu-btn-icon">📋</span>
-        <div class="menu-btn-label">Laboratorios Inscritos</div>
+        <div style="flex:1"><div class="menu-btn-label">Laboratorios Inscritos</div><div class="menu-btn-desc">Total de registros</div></div>
         <span class="menu-btn-count" style="color:#1a5f8a" id="cnt-1">—</span>
-        <div class="menu-btn-desc">Total de registros</div>
       </button>
     </div>
     <div class="menu-btn-wrap">
       <div class="menu-badge" id="badge-2" style="display:none">!</div>
       <button class="menu-btn" onclick="goSection('pagos')">
         <span class="menu-btn-icon">💳</span>
-        <div class="menu-btn-label">Laboratorios Socios</div>
+        <div style="flex:1"><div class="menu-btn-label">Laboratorios Socios</div><div class="menu-btn-desc">Con pago confirmado</div></div>
         <span class="menu-btn-count" style="color:#1a7a4a" id="cnt-2">—</span>
-        <div class="menu-btn-desc">Con pago confirmado</div>
       </button>
     </div>
     <div class="menu-btn-wrap">
       <button class="menu-btn" onclick="goSection('reconocimientos')">
         <span class="menu-btn-icon">🏅</span>
-        <div class="menu-btn-label">Laboratorios con Reconocimiento</div>
+        <div style="flex:1"><div class="menu-btn-label">Laboratorios con Reconocimiento</div><div class="menu-btn-desc">Constancia generada</div></div>
         <span class="menu-btn-count" style="color:#e87722" id="cnt-3">—</span>
-        <div class="menu-btn-desc">Constancia generada</div>
       </button>
     </div>
     <div class="menu-btn-wrap">
       <button class="menu-btn" onclick="goSection('logos')">
         <span class="menu-btn-icon">🌐</span>
-        <div class="menu-btn-label">Datos en Página Web</div>
+        <div style="flex:1"><div class="menu-btn-label">Datos en Página Web</div><div class="menu-btn-desc">Con logo o sitio web</div></div>
         <span class="menu-btn-count" style="color:#2478a8" id="cnt-4">—</span>
-        <div class="menu-btn-desc">Con logo o sitio web</div>
       </button>
     </div>
   </div>
@@ -350,7 +346,7 @@ const BASE={
   r:'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrn0tDIZfQhJ61iuTXt8edkH1UCvZBvHVtSad4ZkzWZjhZzxgobZYbq44I7nR0Yx3tImSUJGUodxM3/pub?gid=472740108&single=true&output=csv',
   l:'https://docs.google.com/spreadsheets/d/e/2PACX-1vRrn0tDIZfQhJ61iuTXt8edkH1UCvZBvHVtSad4ZkzWZjhZzxgobZYbq44I7nR0Yx3tImSUJGUodxM3/pub?gid=1486724500&single=true&output=csv',
 };
-function proxy(url){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(url);}
+function proxy(url){ return url; } // direct
 
 /* ═══════════════════════════════
    STATE
@@ -438,11 +434,17 @@ async function loadData(){
     const prevIns=sheetIns.length;
     const prevPag=Object.keys(sheetPagos).length;
 
+    async function fetchCSV(url){
+      const t='&t='+Date.now();
+      try{ return await fetch(url+t).then(r=>r.text()); }catch(e){
+        return await fetch('https://corsproxy.io/?'+encodeURIComponent(url+t)).then(r=>r.text());
+      }
+    }
     const [r1,r2,r3,r4]=await Promise.all([
-      fetch(proxy(BASE.i)+'&t='+Date.now()).then(r=>r.text()),
-      fetch(proxy(BASE.p)+'&t='+Date.now()).then(r=>r.text()),
-      fetch(proxy(BASE.r)+'&t='+Date.now()).then(r=>r.text()),
-      fetch(proxy(BASE.l)+'&t='+Date.now()).then(r=>r.text()),
+      fetchCSV(BASE.i),
+      fetchCSV(BASE.p),
+      fetchCSV(BASE.r),
+      fetchCSV(BASE.l),
     ]);
 
     sheetIns=parseCSV(r1).map(row=>({
